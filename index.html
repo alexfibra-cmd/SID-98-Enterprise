@@ -5,1534 +5,1542 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SID 98 Enterprise - TelTelecom v7.2</title>
     <style>
-        :root {
-            --bg-color: #008080;
-            --win-gray: #c0c0c0;
-            --win-dark: #808080;
-            --win-darker: #404040;
-            --win-light: #dfdfdf;
-            --win-white: #ffffff;
-            --win-blue-start: #000080;
-            --win-blue-end: #1084d0;
-            --font-main: 'Tahoma', 'Segoe UI', sans-serif;
-            --status-ok: #00a000; 
-            --status-warn: #ffa500;
-            --status-err: #ff4040;
-            --bg-ok: #d4ffd4;
-            --bg-warn: #fff3cd;
-            --bg-err: #ffd4d4;
-        }
+    :root {
+    --bg-color: #008080;
+    --win-gray: #c0c0c0;
+    --win-dark: #808080;
+    --win-darker: #404040;
+    --win-light: #dfdfdf;
+    --win-white: #ffff;
+    --win-blue-start: #000080;
+    --win-blue-end: #1084d0;
+    --font-main: 'Tahoma', 'Segoe UI', sans-serif;
+    --status-ok: #00a000; 
+    --status-warn: #ffa500;
+    --status-err: #ff4040;
+    --bg-ok: #d4ffd4;
+    --bg-warn: #fff3cd;
+    --bg-err: #ffd4d4;
+    }
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            font-family: var(--font-main);
-            background-color: var(--bg-color);
-            height: 100vh;
-            overflow: hidden;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    * { 
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+    }
+    
+    body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    height: 100vh;
+    overflow: hidden;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+    @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+    }
+    
+    @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+    }
 
-        .win98-box {
-            background: var(--win-gray);
-            border-top: 2px solid var(--win-light);
-            border-left: 2px solid var(--win-light);
-            border-right: 2px solid var(--win-darker);
-            border-bottom: 2px solid var(--win-darker);
-            box-shadow: 1px 1px 0 #000;
-        }
-        
-        .win98-inset {
-            background: var(--win-white);
-            border: 2px solid;
-            border-color: var(--win-darker) var(--win-light) var(--win-light) var(--win-darker);
-        }
-        
-        .title-bar {
-            background: linear-gradient(90deg, var(--win-blue-start), var(--win-blue-end));
-            color: white;
-            padding: 3px 6px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-        }
-        
-        .btn-98 {
-            background: var(--win-gray);
-            border: 2px solid;
-            border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-            padding: 3px 12px;
-            color: black;
-            font-family: var(--font-main);
-            cursor: pointer;
-            font-size: 11px;
-            outline: none;
-            min-height: 22px;
-        }
-        
-        .btn-98:hover {
-            background: #d0d0d0;
-        }
-        
-        .btn-98:active { 
-            border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
-            transform: translate(1px, 1px);
-        }
-        
-        input, select, textarea {
-            border: 2px inset var(--win-gray);
-            background: #fff;
-            padding: 3px;
-            font-family: var(--font-main);
-            font-size: 12px;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: 1px solid var(--win-blue-end);
-        }
+    .win98-box {
+    background: var(--win-gray);
+    border-top: 2px solid var(--win-light);
+    border-left: 2px solid var(--win-light);
+    border-right: 2px solid var(--win-darker);
+    border-bottom: 2px solid var(--win-darker);
+    box-shadow: 1px 1px 0 #000;
+    }
+    
+    .win98-inset {
+    background: var(--win-white);
+    border: 2px solid;
+    border-color: var(--win-darker) var(--win-light) var(--win-light) var(--win-darker);
+    }
+    
+    .title-bar {
+    background: linear-gradient(90deg, var(--win-blue-start), var(--win-blue-end));
+    color: white;
+    padding: 3px 6px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    }
+    
+    .btn-98 {
+    background: var(--win-gray);
+    border: 2px solid;
+    border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+    padding: 3px 12px;
+    color: black;
+    font-family: var(--font-main);
+    cursor: pointer;
+    font-size: 11px;
+    outline: none;
+    min-height: 22px;
+    }
+    
+    .btn-98:hover {
+    background: #d0d0d0;
+    }
+    
+    .btn-98:active { 
+    border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+    transform: translate(1px, 1px);
+    }
+    
+    input, select, textarea {
+    border: 2px inset var(--win-gray);
+    background: #fff;
+    padding: 3px;
+    font-family: var(--font-main);
+    font-size: 12px;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+    outline: 1px solid var(--win-blue-end);
+    }
 
-        #app-window {
-            width: 98vw;
-            height: 95vh;
-            display: none;
-            flex-direction: column;
-        }
-        
-        .main-content {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            padding: 4px;
-            gap: 4px;
-        }
-        
-        .sidebar {
-            width: 180px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 6px;
-        }
-        
-        .workspace {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 2px;
-        }
-        
-        .data-grid {
-            flex: 1;
-            overflow: auto;
-            background: white;
-            position: relative;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-        }
-        
-        th {
-            background: var(--win-gray);
-            border: 1px outset #fff;
-            padding: 4px;
-            position: sticky;
-            top: 0;
-            text-align: left;
-            font-weight: bold;
-        }
-        
-        td {
-            border: 1px solid #ddd;
-            padding: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        tr:hover {
-            background: #000080;
-            color: white;
-            cursor: pointer;
-        }
-        
-        tr:nth-child(even) {
-            background: #f8f8f8;
-        }
-        
-        tr:nth-child(even):hover {
-            background: #000080;
-        }
+    #app-window {
+    width: 98vw;
+    height: 95vh;
+    display: none;
+    flex-direction: column;
+    }
+    
+    .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding: 4px;
+    gap: 4px;
+    }
+    
+    .sidebar {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px;
+    }
+    
+    .workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 2px;
+    }
+    
+    .data-grid {
+    flex: 1;
+    overflow: auto;
+    background: white;
+    position: relative;
+    }
+    
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    }
+    
+    th {
+    background: var(--win-gray);
+    border: 1px outset #fff;
+    padding: 4px;
+    position: sticky;
+    top: 0;
+    text-align: left;
+    font-weight: bold;
+    }
+    
+    td {
+    border: 1px solid #ddd;
+    padding: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+    
+    tr:hover {
+    background: #000080;
+    color: white;
+    cursor: pointer;
+    }
+    
+    tr:nth-child(even) {
+    background: #f8f8f8;
+    }
+    
+    tr:nth-child(even):hover {
+    background: #000080;
+    }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(2px);
-            z-index: 1000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .editor-window {
-            width: 800px;
-            max-width: 98%;
-            height: 85vh;
-            display: flex;
-            flex-direction: column;
-        }
+    .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    }
+    
+    .editor-window {
+    width: 800px;
+    max-width: 98%;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    }
 
-        .tabs {
-            display: flex;
-            margin: 6px 6px 0 6px;
-            background: var(--win-gray);
-            padding: 2px 2px 0 2px;
-        }
-        
-        .tab {
-            padding: 4px 12px;
-            background: var(--win-gray);
-            border: 1px solid var(--win-dark);
-            border-bottom: none;
-            cursor: pointer;
-            position: relative;
-            top: 1px;
-            margin-right: 2px;
-        }
-        
-        .tab.active {
-            background: var(--win-white);
-            border-top: 2px solid var(--win-white);
-            border-left: 2px solid var(--win-white);
-            border-right: 2px solid var(--win-dark);
-            z-index: 2;
-            font-weight: bold;
-            top: 0;
-            padding-top: 6px;
-        }
-        
-        .tab-content {
-            flex: 1;
-            margin: 0 6px 6px 6px;
-            padding: 10px;
-            overflow-y: auto;
-            background: var(--win-white);
-        }
-        
-        .tab-section {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .section-hidden {
-            display: none;
-        }
+    .tabs {
+    display: flex;
+    margin: 6px 6px 0 6px;
+    background: var(--win-gray);
+    padding: 2px 2px 0 2px;
+    }
+    
+    .tab {
+    padding: 4px 12px;
+    background: var(--win-gray);
+    border: 1px solid var(--win-dark);
+    border-bottom: none;
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+    margin-right: 2px;
+    }
+    
+    .tab.active {
+    background: var(--win-white);
+    border-top: 2px solid var(--win-white);
+    border-left: 2px solid var(--win-white);
+    border-right: 2px solid var(--win-dark);
+    z-index: 2;
+    font-weight: bold;
+    top: 0;
+    padding-top: 6px;
+    }
+    
+    .tab-content {
+    flex: 1;
+    margin: 0 6px 6px 6px;
+    padding: 10px;
+    overflow-y: auto;
+    background: var(--win-white);
+    }
+    
+    .tab-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    }
+    
+    .section-hidden {
+    display: none;
+    }
 
-        .flex-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        
-        .flex-col {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        
-        .w-100 {
-            width: 100%;
-        }
-        
-        .badge {
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-size: 10px;
-            color: black;
-            font-weight: bold;
-            display: inline-block;
-            text-align: center;
-            min-width: 80px;
-        }
-        
-        .bg-ok { background: var(--bg-ok); }
-        .bg-warn { background: var(--bg-warn); }
-        .bg-err { background: var(--bg-err); }
-        
-        .spin {
-            animation: spin 1.5s linear infinite;
-        }
-        
-        .blink {
-            animation: blink 1s infinite;
-        }
-        
-        #loading-overlay {
-            display: none;
-            position: absolute;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(255,255,255,0.9);
-            z-index:9999;
-            justify-content:center;
-            align-items:center;
-            flex-direction: column;
-        }
-        
-        .form-group {
-            margin-bottom: 8px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 2px;
-            font-weight: bold;
-        }
-        
-        .status-bar {
-            height: 20px;
-            background: var(--win-gray);
-            border-top: 2px solid var(--win-white);
-            padding: 2px 5px;
-            font-size: 11px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        ::-webkit-scrollbar {
-            width: 16px;
-            height: 16px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--win-gray);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--win-dark);
-            border: 2px solid var(--win-gray);
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--win-darker);
-        }
-        
-        #login-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2000;
-            width: 320px;
-        }
-        
-        .file-upload-area {
-            border: 2px dashed var(--win-dark);
-            padding: 20px;
-            text-align: center;
-            background: var(--bg-ok);
-            cursor: pointer;
-        }
-        
-        .file-upload-area:hover {
-            background: var(--bg-warn);
-        }
-        
-        .alert {
-            padding: 8px;
-            border-radius: 3px;
-            margin: 5px 0;
-            border: 1px solid;
-        }
-        
-        .alert-success {
-            background: var(--bg-ok);
-            border-color: var(--status-ok);
-            color: #155724;
-        }
-        
-        .alert-warning {
-            background: var(--bg-warn);
-            border-color: var(--status-warn);
-            color: #856404;
-        }
-        
-        .alert-error {
-            background: var(--bg-err);
-            border-color: var(--status-err);
-            color: #721c24;
-        }
-        
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 3px;
-            border-bottom: 1px dotted #ddd;
-        }
-        
-        .cart-item:hover {
-            background: #f0f0f0;
-        }
-        
-        .cart-item-remove {
-            color: red;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 2px 6px;
-        }
-        
-        .cart-item-remove:hover {
-            background: red;
-            color: white;
-        }
-        
-        .section-header {
-            background: linear-gradient(to right, var(--win-blue-start), var(--win-blue-end));
-            color: white;
-            padding: 4px 8px;
-            font-weight: bold;
-            margin: 8px 0 4px 0;
-        }
+    .flex-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    }
+    
+    .flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    }
+    
+    .w-100 {
+    width: 100%;
+    }
+    
+    .badge {
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    color: black;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+    }
+    
+    .bg-ok { background: var(--bg-ok); }
+    .bg-warn { background: var(--bg-warn); }
+    .bg-err { background: var(--bg-err); }
+    
+    .spin {
+    animation: spin 1.5s linear infinite;
+    }
+    
+    .blink {
+    animation: blink 1s infinite;
+    }
+    
+    #loading-overlay {
+    display: none;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,0.9);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+    flex-direction: column;
+    }
+    
+    .form-group {
+    margin-bottom: 8px;
+    }
+    
+    .form-group label {
+    display: block;
+    margin-bottom: 2px;
+    font-weight: bold;
+    }
+    
+    .status-bar {
+    height: 20px;
+    background: var(--win-gray);
+    border-top: 2px solid var(--win-white);
+    padding: 2px 5px;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+    ::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+    }
+    
+    ::-webkit-scrollbar-track {
+    background: var(--win-gray);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+    background: var(--win-dark);
+    border: 2px solid var(--win-gray);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+    background: var(--win-darker);
+    }
+    
+    #login-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    width: 320px;
+    }
+    
+    .file-upload-area {
+    border: 2px dashed var(--win-dark);
+    padding: 20px;
+    text-align: center;
+    background: var(--bg-ok);
+    cursor: pointer;
+    }
+    
+    .file-upload-area:hover {
+    background: var(--bg-warn);
+    }
+    
+    .alert {
+    padding: 8px;
+    border-radius: 3px;
+    margin: 5px 0;
+    border: 1px solid;
+    }
+    
+    .alert-success {
+    background: var(--bg-ok);
+    border-color: var(--status-ok);
+    color: #155724;
+    }
+    
+    .alert-warning {
+    background: var(--bg-warn);
+    border-color: var(--status-warn);
+    color: #856404;
+    }
+    
+    .alert-error {
+    background: var(--bg-err);
+    border-color: var(--status-err);
+    color: #721c24;
+    }
+    
+    .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px;
+    border-bottom: 1px dotted #ddd;
+    }
+    
+    .cart-item:hover {
+    background: #f0f0f0;
+    }
+    
+    .cart-item-remove {
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 6px;
+    }
+    
+    .cart-item-remove:hover {
+    background: red;
+    color: white;
+    }
+    
+    .section-header {
+    background: linear-gradient(to right, var(--win-blue-start), var(--win-blue-end));
+    color: white;
+    padding: 4px 8px;
+    font-weight: bold;
+    margin: 8px 0 4px 0;
+    }
     </style>
 </head>
 <body>
     <div id="login-modal" class="win98-box">
-        <div class="title-bar">
-            <span>🔒 Login de Rede SID 98</span>
-            <button class="btn-98" style="padding:0 4px; min-width: 20px;" onclick="document.getElementById('login-modal').style.display='none'">X</button>
-        </div>
-        <div class="win98-inset" style="padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
-            <div style="text-align: center; margin-bottom: 10px;">
-                <div style="font-size: 24px; color: var(--win-blue-start);">SID 98</div>
-                <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.2</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="login-email">👤 Usuário (Email):</label>
-                <input type="email" id="login-email" class="w-100" value="alexfibra@gmail.com" placeholder="seu.email@empresa.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="login-password">🔑 Senha:</label>
-                <input type="password" id="login-password" class="w-100" value="sid98access" placeholder="Digite sua senha">
-            </div>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                <label>
-                    <input type="checkbox" checked> Lembrar login
-                </label>
-                <button class="btn-98" onclick="sys.login()">Entrar no Sistema</button>
-            </div>
-            
-            <div id="login-status" class="alert" style="display: none; margin-top: 5px;"></div>
-            
-            <hr style="border: none; border-top: 1px solid var(--win-dark);">
-            
-            <div style="font-size: 10px; color: var(--win-dark); text-align: center;">
-                Sistema Integrado de Dados 98 Enterprise<br>
-                © 2024 TelTelecom - v7.2.1
-            </div>
-        </div>
+    <div class="title-bar">
+    <span>🔒 Login de Rede SID 98</span>
+    <button class="btn-98" style="padding:0 4px; min-width: 20px;" onclick="document.getElementById('login-modal').style.display='none'">X</button>
+    </div>
+    <div class="win98-inset" style="padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
+    <div style="text-align: center; margin-bottom: 10px;">
+    <div style="font-size: 24px; color: var(--win-blue-start);">SID 98</div>
+    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.2</div>
+    </div>
+    
+    <div class="form-group">
+    <label for="login-email">👤 Usuário (Email):</label>
+    <input type="email" id="login-email" class="w-100" value="alexfibra@gmail.com" placeholder="seu.email@empresa.com">
+    </div>
+    
+    <div class="form-group">
+    <label for="login-password">🔑 Senha:</label>
+    <input type="password" id="login-password" class="w-100" value="sid98access" placeholder="Digite sua senha">
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+    <label>
+    <input type="checkbox" checked> Lembrar login
+    </label>
+    <button class="btn-98" onclick="sys.login()">Entrar no Sistema</button>
+    </div>
+    
+    <div id="login-status" class="alert" style="display: none; margin-top: 5px;"></div>
+    
+    <hr style="border: none; border-top: 1px solid var(--win-dark);">
+    
+    <div style="font-size: 10px; color: var(--win-dark); text-align: center;">
+    Sistema Integrado de Dados 98 Enterprise<br>
+    © 2024 TelTelecom - v7.2.1
+    </div>
+    </div>
     </div>
 
     <div id="app-window" class="win98-box">
-        <div class="title-bar">
-            <span class="flex-row">
-                <span style="margin-right: 5px;">🖥️</span>
-                SID 98 Enterprise v7.2 - TelTelecom
-            </span>
-            <div class="flex-row">
-                <button class="btn-98" style="padding: 0 4px; min-width: 20px;" title="Minimizar">_</button>
-                <button class="btn-98" style="padding: 0 4px; min-width: 20px;" onclick="location.reload()" title="Fechar">X</button>
-            </div>
-        </div>
+    <div class="title-bar">
+    <span class="flex-row">
+    <span style="margin-right: 5px;">🖥️</span>
+    SID 98 Enterprise v7.2 - TelTelecom
+    </span>
+    <div class="flex-row">
+    <button class="btn-98" style="padding: 0 4px; min-width: 20px;" title="Minimizar">_</button>
+    <button class="btn-98" style="padding: 0 4px; min-width: 20px;" onclick="location.reload()" title="Fechar">X</button>
+    </div>
+    </div>
 
-        <div style="padding: 4px; border-bottom: 1px solid white; background: var(--win-gray); display: flex; gap: 15px;">
-            <span style="font-weight: bold;">Arquivo</span>
-            <span style="font-weight: bold;">Editar</span>
-            <span style="font-weight: bold;">Visualizar</span>
-            <span style="font-weight: bold;">Ferramentas</span>
-            <span style="font-weight: bold;">Ajuda</span>
-            <div style="flex: 1;"></div>
-            <span id="clock" style="font-family: 'Courier New', monospace;">00:00:00</span>
-        </div>
+    <div style="padding: 4px; border-bottom: 1px solid white; background: var(--win-gray); display: flex; gap: 15px;">
+    <span style="font-weight: bold;">Arquivo</span>
+    <span style="font-weight: bold;">Editar</span>
+    <span style="font-weight: bold;">Visualizar</span>
+    <span style="font-weight: bold;">Ferramentas</span>
+    <span style="font-weight: bold;">Ajuda</span>
+    <div style="flex: 1;"></div>
+    <span id="clock" style="font-family: 'Courier New', monospace;">00:00:00</span>
+    </div>
 
-        <div class="main-content">
-            <div class="sidebar win98-inset">
-                <div class="section-header">Navegação</div>
-                <button class="btn-98 w-100" style="text-align:left; font-weight:bold;" onclick="sys.loadObras()">
-                    📂 Obras Pendentes
-                </button>
-                <button class="btn-98 w-100" style="text-align:left;">
-                    📊 Estatísticas
-                </button>
-                <button class="btn-98 w-100" style="text-align:left;">
-                    📋 Relatórios
-                </button>
-                <button class="btn-98 w-100" style="text-align:left;">
-                    🚚 Transporte
-                </button>
-                
-                <div style="flex: 1;"></div>
-                
-                <div class="section-header">Sessão</div>
-                <div class="win98-box" style="padding: 8px; text-align: center; background: white;">
-                    <small id="user-display">Usuário: Não autenticado</small><br>
-                    <small id="last-update">Última atualização: --:--</small>
-                    <button class="btn-98 w-100" style="margin-top: 5px;" onclick="sys.logout()">Sair</button>
-                </div>
-            </div>
+    <div class="main-content">
+    <div class="sidebar win98-inset">
+    <div class="section-header">Navegação</div>
+    <button class="btn-98 w-100" style="text-align:left; font-weight:bold;" onclick="sys.loadObras()">
+    📂 Obras Pendentes
+    </button>
+    <button class="btn-98 w-100" style="text-align:left;">
+    📊 Estatísticas
+    </button>
+    <button class="btn-98 w-100" style="text-align:left;">
+    📋 Relatórios
+    </button>
+    <button class="btn-98 w-100" style="text-align:left;">
+    🚚 Transporte
+    </button>
+    
+    <div style="flex: 1;"></div>
+    
+    <div class="section-header">Sessão</div>
+    <div class="win98-box" style="padding: 8px; text-align: center; background: white;">
+    <small id="user-display">Usuário: Não autenticado</small><br>
+    <small id="last-update">Última atualização: --:--</small>
+    <button class="btn-98 w-100" style="margin-top: 5px;" onclick="sys.logout()">Sair</button>
+    </div>
+    </div>
 
-            <div class="workspace">
-                <div class="win98-box flex-row" style="padding: 6px;">
-                    <label for="search-input">🔍 Buscar Obra:</label>
-                    <input type="text" id="search-input" placeholder="ID, Descrição, Técnico..." style="width: 250px;" 
-                           onkeydown="if(event.key==='Enter') sys.search()">
-                    <button class="btn-98" onclick="sys.search()">Buscar</button>
-                    
-                    <div style="flex: 1;"></div>
-                    
-                    <button class="btn-98" onclick="sys.loadCatalogs()" title="Atualizar catálogos">
-                        🔄 Recarregar
-                    </button>
-                    <button class="btn-98" onclick="sys.loadObras()" title="Carregar todas as obras">
-                        📥 Atualizar Tudo
-                    </button>
-                    <button class="btn-98" onclick="sys.sincronizarObras()" title="Processar dados da base bruta">
-                        🔄 Processar Dados
-                    </button>
-                </div>
+    <div class="workspace">
+    <div class="win98-box flex-row" style="padding: 6px;">
+    <label for="search-input">🔍 Buscar Obra:</label>
+    <input type="text" id="search-input" placeholder="ID, Descrição, Técnico..." style="width: 250px;" 
+    onkeydown="if(event.key==='Enter') sys.search()">
+    <button class="btn-98" onclick="sys.search()">Buscar</button>
+    
+    <div style="flex: 1;"></div>
+    
+    <button class="btn-98" onclick="sys.loadCatalogs()" title="Atualizar catálogos">
+    🔄 Recarregar
+    </button>
+    <button class="btn-98" onclick="sys.loadObras()" title="Carregar todas as obras">
+    📥 Atualizar Tudo
+    </button>
+    <button class="btn-98" onclick="sys.sincronizarObras()" title="Processar dados da base bruta">
+    🔄 Processar Dados
+    </button>
+    </div>
 
-                <div class="data-grid win98-inset">
-                    <div id="loading-overlay">
-                        <div style="font-size: 36px; color: var(--win-blue-start);">🔄</div>
-                        <span style="margin-top: 10px; font-weight: bold;">Processando solicitação...</span>
-                        <span style="font-size: 10px; color: var(--win-dark); margin-top: 5px;">
-                            Aguarde enquanto o sistema consulta os dados
-                        </span>
-                    </div>
-                    
-                    <table id="main-table">
-                        <thead>
-                            <tr>
-                                <th width="100">ID Obra</th>
-                                <th width="300">Descrição</th>
-                                <th width="120">Técnico</th>
-                                <th width="80">Operadora</th>
-                                <th width="90">Status</th>
-                                <th width="150">Pendência</th>
-                                <th width="80">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <tr><td colspan="7" style="text-align: center; padding: 20px; color: var(--win-dark);">
-                                Faça login para carregar os dados do sistema
-                            </td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="flex-row" style="justify-content: space-between; padding: 5px; background: var(--win-gray);">
-                    <button class="btn-98" onclick="sys.prevPage()">← Anterior</button>
-                    <span id="page-info" style="font-weight: bold;">Página 1 de 1</span>
-                    <button class="btn-98" onclick="sys.nextPage()">Próxima →</button>
-                </div>
-            </div>
-        </div>
+    <div class="data-grid win98-inset">
+    <div id="loading-overlay">
+    <div style="font-size: 36px; color: var(--win-blue-start);">🔄</div>
+    <span style="margin-top: 10px; font-weight: bold;">Processando solicitação...</span>
+    <span style="font-size: 10px; color: var(--win-dark); margin-top: 5px;">
+    Aguarde enquanto o sistema consulta os dados
+    </span>
+    </div>
+    
+    <table id="main-table">
+    <thead>
+    <tr>
+    <th width="100">ID Obra</th>
+    <th width="300">Descrição</th>
+    <th width="120">Técnico</th>
+    <th width="80">Operadora</th>
+    <th width="90">Status</th>
+    <th width="150">Pendência</th>
+    <th width="80">Ação</th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    <tr><td colspan="7" style="text-align: center; padding: 20px; color: var(--win-dark);">
+    Faça login para carregar os dados do sistema
+    </td></tr>
+    </tbody>
+    </table>
+    </div>
+    
+    <div class="flex-row" style="justify-content: space-between; padding: 5px; background: var(--win-gray);">
+    <button class="btn-98" onclick="sys.prevPage()">← Anterior</button>
+    <span id="page-info" style="font-weight: bold;">Página 1 de 1</span>
+    <button class="btn-98" onclick="sys.nextPage()">Próxima →</button>
+    </div>
+    </div>
+    </div>
 
-        <div class="status-bar">
-            <span id="status-msg">Sistema pronto. Aguardando autenticação...</span>
-            <span class="flex-row">
-                <span id="record-count">0 registros</span>
-                <span style="margin: 0 5px;">|</span>
-                <span>SID-98 Online</span>
-            </span>
-        </div>
+    <div class="status-bar">
+    <span id="status-msg">Sistema pronto. Aguardando autenticação...</span>
+    <span class="flex-row">
+    <span id="record-count">0 registros</span>
+    <span style="margin: 0 5px;">|</span>
+    <span>SID-98 Online</span>
+    </span>
+    </div>
     </div>
 
     <div id="editor-modal" class="modal-overlay">
-        <div class="win98-box editor-window">
-            <div class="title-bar">
-                <span id="ed-title">Editando Obra</span>
-                <button class="btn-98" style="padding:0 4px; min-width: 20px;" onclick="editor.close()">X</button>
-            </div>
+    <div class="win98-box editor-window">
+    <div class="title-bar">
+    <span id="ed-title">Editando Obra</span>
+    <button class="btn-98" style="padding:0 4px; min-width: 20px;" onclick="editor.close()">X</button>
+    </div>
 
-            <div class="tabs">
-                <div class="tab active" onclick="editor.tab('dados')">📝 Dados & RDO</div>
-                <div class="tab" onclick="editor.tab('materiais')">📦 Materiais</div>
-                <div class="tab" onclick="editor.tab('fotos')">📷 Evidências</div>
-                <div class="tab" onclick="editor.tab('historico')">📋 Histórico</div>
-            </div>
+    <div class="tabs">
+    <div class="tab active" onclick="editor.tab('dados')">📝 Dados & RDO</div>
+    <div class="tab" onclick="editor.tab('materiais')">📦 Materiais</div>
+    <div class="tab" onclick="editor.tab('fotos')">📷 Evidências</div>
+    <div class="tab" onclick="editor.tab('historico')">📋 Histórico</div>
+    </div>
 
-            <div class="tab-content win98-inset">
-                <div id="tab-dados" class="tab-section">
-                    <div class="form-group">
-                        <div class="flex-row">
-                            <div style="flex: 1;">
-                                <label>Código da Obra:</label>
-                                <input type="text" id="ed-id" readonly style="background:#eee; font-weight: bold; font-size: 14px;">
-                            </div>
-                            <div style="flex: 2;">
-                                <label>Técnico Responsável:</label>
-                                <input type="text" id="ed-tecnico" class="w-100" readonly style="background:#eee;">
-                            </div>
-                            <div style="flex: 1;">
-                                <label>Operadora:</label>
-                                <input type="text" id="ed-operadora" readonly style="background:#eee;">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="section-header">1. Máscara BA (Relatório Textual)</div>
-                    <textarea id="ed-mascara" rows="8" class="w-100" 
-                              placeholder="Cole aqui o relatório textual com os códigos BA..."></textarea>
-                    
-                    <div class="section-header">2. Aplicação Feita (Carrinho Formal)</div>
-                    <input type="text" id="ed-aplicacao" class="w-100" 
-                           style="background:#f0f8ff; color:blue; font-weight: bold;" 
-                           placeholder="Este campo será preenchido automaticamente pela aba Materiais" readonly>
-                    
-                    <div class="section-header">3. Pendências / Auditoria</div>
-                    <textarea id="ed-pendencia" rows="4" class="w-100" 
-                              placeholder="Observações de devolução, pendências, auditoria..."></textarea>
-                    
-                    <div class="section-header">4. Endereço / Localização</div>
-                    <textarea id="ed-endereco" rows="2" class="w-100" readonly style="background:#eee;"></textarea>
-                </div>
+    <div class="tab-content win98-inset">
+    <div id="tab-dados" class="tab-section">
+    <div class="form-group">
+    <div class="flex-row">
+    <div style="flex: 1;">
+    <label>Código da Obra:</label>
+    <input type="text" id="ed-id" readonly style="background:#eee; font-weight: bold; font-size: 14px;">
+    </div>
+    <div style="flex: 2;">
+    <label>Técnico Responsável:</label>
+    <input type="text" id="ed-tecnico" class="w-100" readonly style="background:#eee;">
+    </div>
+    <div style="flex: 1;">
+    <label>Operadora:</label>
+    <input type="text" id="ed-operadora" readonly style="background:#eee;">
+    </div>
+    </div>
+    </div>
+    
+    <div class="section-header">1. Máscara BA (Relatório Textual)</div>
+    <textarea id="ed-mascara" rows="8" class="w-100" 
+    placeholder="Cole aqui o relatório textual com os códigos BA..."></textarea>
+    
+    <div class="section-header">2. Aplicação Feita (Carrinho Formal)</div>
+    <input type="text" id="ed-aplicacao" class="w-100" 
+    style="background:#f0f8ff; color:blue; font-weight: bold;" 
+    placeholder="Este campo será preenchido automaticamente pela aba Materiais" readonly>
+    
+    <div class="section-header">3. Pendências / Auditoria</div>
+    <textarea id="ed-pendencia" rows="4" class="w-100" 
+    placeholder="Observações de devolução, pendências, auditoria..."></textarea>
+    
+    <div class="section-header">4. Endereço / Localização</div>
+    <textarea id="ed-endereco" rows="2" class="w-100" readonly style="background:#eee;"></textarea>
+    </div>
 
-                <div id="tab-materiais" class="tab-section section-hidden">
-                    <div class="section-header">Catálogo de Materiais</div>
-                    <div class="win98-box" style="padding: 10px; margin-bottom: 10px;">
-                        <div class="flex-row">
-                            <input type="text" id="mat-search" class="w-100" 
-                                   placeholder="Digite para filtrar materiais por código ou descrição..."
-                                   onkeyup="editor.filterMat()">
-                            <button class="btn-98" onclick="editor.filterMat()">Filtrar</button>
-                        </div>
-                        
-                        <div class="flex-row" style="margin-top: 10px;">
-                            <select id="mat-select" class="w-100" style="height: 26px;"></select>
-                            <input type="number" id="mat-qtd" value="1" min="1" max="999" style="width: 60px; text-align: center;">
-                            <button class="btn-98" onclick="editor.addMaterial()" style="font-weight: bold;">+ Adicionar</button>
-                        </div>
-                    </div>
-                    
-                    <div class="section-header">Carrinho de Materiais</div>
-                    <div class="win98-inset" style="height: 300px; overflow: auto; padding: 5px;">
-                        <table class="w-100">
-                            <thead>
-                                <tr>
-                                    <th width="40">Qtd</th>
-                                    <th>Descrição do Material</th>
-                                    <th width="100">Código</th>
-                                    <th width="40">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="cart-list">
-                                <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
-                                    Nenhum material adicionado ao carrinho
-                                </td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="alert alert-info" style="margin-top: 10px;">
-                        <strong>Dica:</strong> Os itens adicionados ao carrinho preencherão automaticamente o campo "Aplicação Feita".
-                    </div>
-                </div>
+    <div id="tab-materiais" class="tab-section section-hidden">
+    <div class="section-header">Catálogo de Materiais</div>
+    <div class="win98-box" style="padding: 10px; margin-bottom: 10px;">
+    <div class="flex-row">
+    <input type="text" id="mat-search" class="w-100" 
+    placeholder="Digite para filtrar materiais por código ou descrição..."
+    onkeyup="editor.filterMat()">
+    <button class="btn-98" onclick="editor.filterMat()">Filtrar</button>
+    </div>
+    
+    <div class="flex-row" style="margin-top: 10px;">
+    <select id="mat-select" class="w-100" style="height: 26px;"></select>
+    <input type="number" id="mat-qtd" value="1" min="1" max="999" style="width: 60px; text-align: center;">
+    <button class="btn-98" onclick="editor.addMaterial()" style="font-weight: bold;">+ Adicionar</button>
+    </div>
+    </div>
+    
+    <div class="section-header">Carrinho de Materiais</div>
+    <div class="win98-inset" style="height: 300px; overflow: auto; padding: 5px;">
+    <table class="w-100">
+    <thead>
+    <tr>
+    <th width="40">Qtd</th>
+    <th>Descrição do Material</th>
+    <th width="100">Código</th>
+    <th width="40">Ação</th>
+    </tr>
+    </thead>
+    <tbody id="cart-list">
+    <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
+    Nenhum material adicionado ao carrinho
+    </td></tr>
+    </tbody>
+    </table>
+    </div>
+    
+    <div class="alert alert-info" style="margin-top: 10px;">
+    <strong>Dica:</strong> Os itens adicionados ao carrinho preencherão automaticamente o campo "Aplicação Feita".
+    </div>
+    </div>
 
-                <div id="tab-fotos" class="tab-section section-hidden">
-                    <div class="section-header">Upload de Evidências Fotométricas</div>
-                    
-                    <div class="file-upload-area" onclick="document.getElementById('file-input').click()">
-                        <div style="font-size: 48px;">📷</div>
-                        <p><strong>Clique aqui ou arraste fotos para esta área</strong></p>
-                        <p style="font-size: 11px; color: var(--win-dark);">
-                            Formatos suportados: JPG, PNG, GIF (Máx. 5MB cada)
-                        </p>
-                        <p style="font-size: 11px; color: var(--win-blue-start);">
-                            Recomendado: Fotos da obra, equipamentos, medições
-                        </p>
-                    </div>
-                    
-                    <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
-                    
-                    <div class="flex-row" style="justify-content: center; margin: 10px 0;">
-                        <button class="btn-98" onclick="editor.uploadFiles()" style="font-weight: bold;">
-                            ⬆️ Fazer Upload Agora
-                        </button>
-                        <button class="btn-98" onclick="editor.clearFiles()">
-                            🗑️ Limpar Seleção
-                        </button>
-                    </div>
-                    
-                    <div id="file-list" style="margin: 10px 0; font-size: 11px;"></div>
-                    
-                    <div id="upload-status" class="alert" style="display: none;"></div>
-                    
-                    <input type="hidden" id="uploaded-urls">
-                    
-                    <div class="section-header">Fotos já Anexadas</div>
-                    <div id="existing-fotos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px;">
-                        <!-- Fotos existentes aparecerão aqui -->
-                    </div>
-                </div>
+    <div id="tab-fotos" class="tab-section section-hidden">
+    <div class="section-header">Upload de Evidências Fotométricas</div>
+    
+    <div class="file-upload-area" onclick="document.getElementById('file-input').click()">
+    <div style="font-size: 48px;">📷</div>
+    <p><strong>Clique aqui ou arraste fotos para esta área</strong></p>
+    <p style="font-size: 11px; color: var(--win-dark);">
+    Formatos suportados: JPG, PNG, GIF (Máx. 5MB cada)
+    </p>
+    <p style="font-size: 11px; color: var(--win-blue-start);">
+    Recomendado: Fotos da obra, equipamentos, medições
+    </p>
+    </div>
+    
+    <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+    
+    <div class="flex-row" style="justify-content: center; margin: 10px 0;">
+    <button class="btn-98" onclick="editor.uploadFiles()" style="font-weight: bold;">
+    ⬆️ Fazer Upload Agora
+    </button>
+    <button class="btn-98" onclick="editor.clearFiles()">
+    🗑️ Limpar Seleção
+    </button>
+    </div>
+    
+    <div id="file-list" style="margin: 10px 0; font-size: 11px;"></div>
+    
+    <div id="upload-status" class="alert" style="display: none;"></div>
+    
+    <input type="hidden" id="uploaded-urls">
+    
+    <div class="section-header">Fotos já Anexadas</div>
+    <div id="existing-fotos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px;">
+    <!-- Fotos existentes aparecerão aqui -->
+    </div>
+    </div>
 
-                <div id="tab-historico" class="tab-section section-hidden">
-                    <div class="section-header">Histórico de Alterações</div>
-                    <div class="win98-inset" style="height: 400px; overflow: auto; padding: 10px;">
-                        <table class="w-100">
-                            <thead>
-                                <tr>
-                                    <th width="120">Data/Hora</th>
-                                    <th width="100">Usuário</th>
-                                    <th>Ação</th>
-                                    <th width="100">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historico-list">
-                                <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
-                                    Carregando histórico...
-                                </td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div id="tab-historico" class="tab-section section-hidden">
+    <div class="section-header">Histórico de Alterações</div>
+    <div class="win98-inset" style="height: 400px; overflow: auto; padding: 10px;">
+    <table class="w-100">
+    <thead>
+    <tr>
+    <th width="120">Data/Hora</th>
+    <th width="100">Usuário</th>
+    <th>Ação</th>
+    <th width="100">Status</th>
+    </tr>
+    </thead>
+    <tbody id="historico-list">
+    <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
+    Carregando histórico...
+    </td></tr>
+    </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
 
-            <div class="flex-row" style="padding: 10px; justify-content: flex-end; background: var(--win-gray); border-top: 2px solid var(--win-dark);">
-                <span id="save-status" style="margin-right: auto; color: blue; font-weight: bold;"></span>
-                <button class="btn-98" onclick="editor.testRDO()" title="Testar geração de RDO">
-                    🧪 Testar RDO
-                </button>
-                <button class="btn-98" onclick="editor.save(false)" title="Salvar sem gerar RDO">
-                    💾 Salvar Apenas
-                </button>
-                <button class="btn-98" style="font-weight: bold; background: #ffcc00;" 
-                        onclick="editor.save(true)" title="Salvar e gerar RDO em PDF">
-                    🚀 Salvar & Gerar RDO
-                </button>
-            </div>
-        </div>
+    <div class="flex-row" style="padding: 10px; justify-content: flex-end; background: var(--win-gray); border-top: 2px solid var(--win-dark);">
+    <span id="save-status" style="margin-right: auto; color: blue; font-weight: bold;"></span>
+    <button class="btn-98" onclick="editor.testRDO()" title="Testar geração de RDO">
+    🧪 Testar RDO
+    </button>
+    <button class="btn-98" onclick="editor.save(false)" title="Salvar sem gerar RDO">
+    💾 Salvar Apenas
+    </button>
+    <button class="btn-98" style="font-weight: bold; background: #ffcc00;" 
+    onclick="editor.save(true)" title="Salvar e gerar RDO em PDF">
+    🚀 Salvar & Gerar RDO
+    </button>
+    </div>
+    </div>
     </div>
 
     <script>
-        // =============================================
-        // CONFIGURAÇÃO DO SISTEMA
-        // =============================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyxytqUhVzU8Nn-GEm-9AS8zZkBEc5rUeccJ10y9F1HGAsKXckEGsA8mMmSoR-PvEIm7A/exec';
-        
-        const CONFIG = {
-            itemsPerPage: 20,
-            empresa: 'TelTelecom',
-            versao: '7.2.1'
-        };
-        
-        const estado = {
-            usuario: null,
-            obras: [],
-            catalogo: [],
-            currentPage: 1,
-            totalPages: 1,
-            obraEditando: null,
-            filtroAtivo: false
-        };
+    // ====
+    // CONFIGURAÇÃO DO SISTEMA
+    // ====
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyxytqUhVzU8Nn-GEm-9AS8zZkBEc5rUeccJ10y9F1HGAsKXckEGsA8mMmSoR-PvEIm7A/exec';
+    
+    const CONFIG = {
+    itemsPerPage: 20,
+    empresa: 'TelTelecom',
+    versao: '7.2.1'
+    };
+    
+    const estado = {
+    usuario: null,
+    obras: [],
+    catalogo: [],
+    currentPage: 1,
+    totalPages: 1,
+    obraEditando: null,
+    filtroAtivo: false
+    };
 
-        // =============================================
-        // SISTEMA PRINCIPAL
-        // =============================================
-        const sys = {
-            init: function() {
-                this.updateClock();
-                setInterval(() => this.updateClock(), 1000);
-                
-                const savedUser = localStorage.getItem('sid98_user');
-                if (savedUser) {
-                    document.getElementById('login-email').value = savedUser;
-                }
-                
-                document.getElementById('search-input').focus();
-                console.log('SID 98 Enterprise v' + CONFIG.versao + ' inicializado');
-            },
-            
-            updateClock: function() {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('pt-BR', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-                const dateStr = now.toLocaleDateString('pt-BR');
-                document.getElementById('clock').textContent = `${dateStr} ${timeStr}`;
-            },
-            
-            login: function() {
-                const email = document.getElementById('login-email').value.trim();
-                const password = document.getElementById('login-password').value;
-                
-                if (!email) {
-                    this.showLoginError('Por favor, informe seu email');
-                    return;
-                }
-                
-                this.showLoading(true);
-                this.showStatus('Autenticando...', 'info');
-                
-                this.fetchJSONP({ acao: 'login', email: email }, (res) => {
-                    this.showLoading(false);
-                    
-                    if (res.sucesso) {
-                        estado.usuario = email;
-                        estado.nivel = res.nivel || 'tecnico';
-                        
-                        document.getElementById('login-modal').style.display = 'none';
-                        document.getElementById('app-window').style.display = 'flex';
-                        document.getElementById('user-display').innerHTML = 
-                            `Usuário: <strong>${res.nome || email.split('@')[0]}</strong><br>Nível: ${estado.nivel}`;
-                        
-                        localStorage.setItem('sid98_user', email);
-                        
-                        this.showStatus(`Bem-vindo, ${res.nome || email}!`, 'success');
-                        this.loadCatalogs();
-                        this.loadObras();
-                        
-                    } else {
-                        this.showLoginError(res.mensagem || 'Erro no login');
-                    }
-                });
-            },
-            
-            logout: function() {
-                if (confirm('Deseja realmente sair do sistema?')) {
-                    estado.usuario = null;
-                    localStorage.removeItem('sid98_user');
-                    
-                    document.getElementById('app-window').style.display = 'none';
-                    document.getElementById('login-modal').style.display = 'block';
-                    document.getElementById('login-password').value = '';
-                    document.getElementById('login-status').style.display = 'none';
-                    
-                    this.showLoginStatus('Você saiu do sistema', 'info');
-                }
-            },
-            
-            showLoginError: function(msg) {
-                const statusEl = document.getElementById('login-status');
-                statusEl.textContent = msg;
-                statusEl.className = 'alert alert-error';
-                statusEl.style.display = 'block';
-                
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 5000);
-            },
-            
-            showLoginStatus: function(msg, type) {
-                const statusEl = document.getElementById('login-status');
-                statusEl.textContent = msg;
-                statusEl.className = `alert alert-${type}`;
-                statusEl.style.display = 'block';
-            },
-            
-            showStatus: function(msg, type = 'info') {
-                const statusEl = document.getElementById('status-msg');
-                statusEl.textContent = msg;
-                
-                switch(type) {
-                    case 'success':
-                        statusEl.style.color = 'green';
-                        statusEl.style.fontWeight = 'bold';
-                        break;
-                    case 'error':
-                        statusEl.style.color = 'red';
-                        statusEl.style.fontWeight = 'bold';
-                        break;
-                    case 'warning':
-                        statusEl.style.color = 'orange';
-                        break;
-                    default:
-                        statusEl.style.color = 'black';
-                }
-                
-                const now = new Date();
-                document.getElementById('last-update').textContent = 
-                    `Última atualização: ${now.toLocaleTimeString('pt-BR', {hour12: false, hour: '2-digit', minute: '2-digit'})}`;
-            },
-            
-            loadCatalogs: function() {
-                if (!estado.usuario) return;
-                
-                this.showStatus('Carregando catálogo de materiais...', 'info');
-                this.showLoading(true);
-                
-                this.fetchJSONP({ acao: 'listar_catalogos' }, (res) => {
-                    this.showLoading(false);
-                    
-                    if (res.sucesso) {
-                        estado.catalogo = [...(res.materiais || []), ...(res.servicos || [])];
-                        this.showStatus(`Catálogo carregado: ${estado.catalogo.length} itens`, 'success');
-                        
-                        if (editor) {
-                            editor.popularSelectMateriais();
-                        }
-                    } else {
-                        this.showStatus('Erro ao carregar catálogo: ' + res.mensagem, 'error');
-                    }
-                });
-            },
-            
-            loadObras: function() {
-                if (!estado.usuario) return;
-                
-                this.showStatus('Carregando obras...', 'info');
-                this.showLoading(true);
-                
-                this.fetchJSONP({ acao: 'resolver_obra', termo: '' }, (res) => {
-                    this.showLoading(false);
-                    
-                    if (res.sucesso) {
-                        estado.obras = res.obras || [];
-                        estado.currentPage = 1;
-                        estado.totalPages = Math.ceil(estado.obras.length / CONFIG.itemsPerPage);
-                        
-                        this.renderTable();
-                        this.showStatus(`${estado.obras.length} obras carregadas`, 'success');
-                    } else {
-                        this.showStatus('Erro ao carregar obras: ' + res.mensagem, 'error');
-                    }
-                });
-            },
-            
-            search: function() {
-                if (!estado.usuario) {
-                    alert('Faça login primeiro');
-                    return;
-                }
-                
-                const term = document.getElementById('search-input').value.trim();
-                
-                if (!term) {
-                    this.loadObras();
-                    estado.filtroAtivo = false;
-                    return;
-                }
-                
-                this.showStatus(`Buscando por: "${term}"...`, 'info');
-                this.showLoading(true);
-                
-                this.fetchJSONP({ acao: 'resolver_obra', termo: term }, (res) => {
-                    this.showLoading(false);
-                    
-                    if (res.sucesso) {
-                        const obrasFiltradas = res.obras || [];
-                        
-                        estado.obras = obrasFiltradas;
-                        estado.currentPage = 1;
-                        estado.totalPages = Math.ceil(obrasFiltradas.length / CONFIG.itemsPerPage);
-                        estado.filtroAtivo = true;
-                        
-                        this.renderTable();
-                        
-                        if (obrasFiltradas.length === 0) {
-                            this.showStatus(`Nenhuma obra encontrada para: "${term}"`, 'warning');
-                        } else {
-                            this.showStatus(`${obrasFiltradas.length} obras encontradas`, 'success');
-                        }
-                    } else {
-                        this.showStatus('Erro na busca: ' + res.mensagem, 'error');
-                    }
-                });
-            },
-            
-            sincronizarObras: function() {
-                if (!estado.usuario) return;
-                
-                if (!confirm('Deseja sincronizar os dados da base bruta?')) return;
-                
-                this.showStatus('Sincronizando obras...', 'info');
-                this.showLoading(true);
-                
-                this.fetchJSONP({ acao: 'sincronizar_obras' }, (res) => {
-                    this.showLoading(false);
-                    
-                    if (res.sucesso) {
-                        this.showStatus(`Sincronização concluída: ${res.novas} novas, ${res.atualizadas} atualizadas`, 'success');
-                        this.loadObras();
-                    } else {
-                        this.showStatus('Erro na sincronização: ' + res.mensagem, 'error');
-                    }
-                });
-            },
-            
-            renderTable: function() {
-                const tbody = document.getElementById('table-body');
-                const startIndex = (estado.currentPage - 1) * CONFIG.itemsPerPage;
-                const endIndex = startIndex + CONFIG.itemsPerPage;
-                const obrasToShow = estado.obras.slice(startIndex, endIndex);
-                
-                tbody.innerHTML = '';
-                
-                if (obrasToShow.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="7" style="text-align: center; padding: 30px; color: var(--win-dark);">
-                                ${estado.filtroAtivo ? 'Nenhuma obra encontrada com os filtros atuais' : 'Nenhuma obra cadastrada'}
-                            </td>
-                        </tr>
-                    `;
-                } else {
-                    obrasToShow.forEach(obra => {
-                        const statusColor = 
-                            obra.STATUS === 'CONCLUIDO' ? 'bg-ok' :
-                            obra.STATUS === 'PENDENTE' ? 'bg-err' :
-                            obra.STATUS === 'DEVOLVIDO' ? 'bg-warn' : 'bg-warn';
-                        
-                        const tr = document.createElement('tr');
-                        tr.onclick = () => editor.open(obra);
-                        tr.title = `Clique para editar ${obra.COD_OBRA_NUM}`;
-                        
-                        tr.innerHTML = `
-                            <td><strong>${obra.COD_OBRA_NUM}</strong></td>
-                            <td title="${obra.DESCRICAO}">${obra.DESCRICAO.substring(0, 50)}${obra.DESCRICAO.length > 50 ? '...' : ''}</td>
-                            <td>${obra.TECNICO || '-'}</td>
-                            <td>${obra.OPERADORA || '-'}</td>
-                            <td><span class="badge ${statusColor}">${obra.STATUS || 'PENDENTE'}</span></td>
-                            <td title="${obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || 'Sem pendências'}">
-                                ${(obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '').substring(0, 20)}${(obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '').length > 20 ? '...' : ''}
-                            </td>
-                            <td>
-                                <button class="btn-98" onclick="event.stopPropagation(); editor.open(${JSON.stringify(obra).replace(/"/g, '&quot;')})">
-                                    Abrir
-                                </button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                }
-                
-                document.getElementById('page-info').textContent = 
-                    `Página ${estado.currentPage} de ${estado.totalPages}`;
-                document.getElementById('record-count').textContent = 
-                    `${estado.obras.length} registros`;
-            },
-            
-            prevPage: function() {
-                if (estado.currentPage > 1) {
-                    estado.currentPage--;
-                    this.renderTable();
-                }
-            },
-            
-            nextPage: function() {
-                if (estado.currentPage < estado.totalPages) {
-                    estado.currentPage++;
-                    this.renderTable();
-                }
-            },
-            
-            showLoading: function(show) {
-                document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
-            },
-            
-            fetchJSONP: function(params, callback) {
-                const script = document.createElement('script');
-                const callbackName = 'cb_' + Math.round(100000 * Math.random());
-                
-                this.showLoading(true);
-                
-                window[callbackName] = (data) => {
-                    delete window[callbackName];
-                    document.body.removeChild(script);
-                    this.showLoading(false);
-                    callback(data);
-                };
-                
-                const query = new URLSearchParams(params).toString();
-                script.src = `${GAS_URL}?${query}&callback=${callbackName}`;
-                script.onerror = () => {
-                    this.showLoading(false);
-                    this.showStatus('Erro de comunicação com o servidor', 'error');
-                    alert("Erro de comunicação com o servidor GAS.");
-                };
-                
-                document.body.appendChild(script);
-            }
-        };
+    // ====
+    // SISTEMA PRINCIPAL
+    // ====
+    const sys = {
+    init: function() {
+    this.updateClock();
+    setInterval(() => this.updateClock(), 1000);
+    
+    const savedUser = localStorage.getItem('sid98_user');
+    if (savedUser) {
+    document.getElementById('login-email').value = savedUser;
+    }
+    
+    document.getElementById('search-input').focus();
+    console.log('SID 98 Enterprise v' + CONFIG.versao + ' inicializado');
+    },
+    
+    updateClock: function() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('pt-BR', { 
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+    });
+    const dateStr = now.toLocaleDateString('pt-BR');
+    document.getElementById('clock').textContent = `${dateStr} ${timeStr}`;
+    },
+    
+    login: function() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    
+    if (!email) {
+    this.showLoginError('Por favor, informe seu email');
+    return;
+    }
+    
+    this.showLoading(true);
+    this.showStatus('Autenticando...', 'info');
+    
+    this.fetchJSONP({ acao: 'login', email: email }, (res) => {
+    this.showLoading(false);
+    
+    if (res.sucesso) {
+    estado.usuario = email;
+    estado.nivel = res.nivel || 'tecnico';
+    
+    document.getElementById('login-modal').style.display = 'none';
+    document.getElementById('app-window').style.display = 'flex';
+    document.getElementById('user-display').innerHTML = 
+    `Usuário: <strong>${res.nome || email.split('@')[0]}</strong><br>Nível: ${estado.nivel}`;
+    
+    localStorage.setItem('sid98_user', email);
+    
+    this.showStatus(`Bem-vindo, ${res.nome || email}!`, 'success');
+    this.loadCatalogs();
+    this.loadObras();
+    
+    } else {
+    this.showLoginError(res.mensagem || 'Erro no login');
+    }
+    });
+    },
+    
+    logout: function() {
+    if (confirm('Deseja realmente sair do sistema?')) {
+    estado.usuario = null;
+    localStorage.removeItem('sid98_user');
+    
+    document.getElementById('app-window').style.display = 'none';
+    document.getElementById('login-modal').style.display = 'block';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-status').style.display = 'none';
+    
+    this.showLoginStatus('Você saiu do sistema', 'info');
+    }
+    },
+    
+    showLoginError: function(msg) {
+    const statusEl = document.getElementById('login-status');
+    statusEl.textContent = msg;
+    statusEl.className = 'alert alert-error';
+    statusEl.style.display = 'block';
+    
+    setTimeout(() => {
+    statusEl.style.display = 'none';
+    }, 5000);
+    },
+    
+    showLoginStatus: function(msg, type) {
+    const statusEl = document.getElementById('login-status');
+    statusEl.textContent = msg;
+    statusEl.className = `alert alert-${type}`;
+    statusEl.style.display = 'block';
+    },
+    
+    showStatus: function(msg, type = 'info') {
+    const statusEl = document.getElementById('status-msg');
+    statusEl.textContent = msg;
+    
+    switch(type) {
+    case 'success':
+    statusEl.style.color = 'green';
+    statusEl.style.fontWeight = 'bold';
+    break;
+    case 'error':
+    statusEl.style.color = 'red';
+    statusEl.style.fontWeight = 'bold';
+    break;
+    case 'warning':
+    statusEl.style.color = 'orange';
+    break;
+    default:
+    statusEl.style.color = 'black';
+    }
+    
+    const now = new Date();
+    document.getElementById('last-update').textContent = 
+    `Última atualização: ${now.toLocaleTimeString('pt-BR', {hour12: false, hour: '2-digit', minute: '2-digit'})}`;
+    },
+    
+    loadCatalogs: function() {
+    if (!estado.usuario) return;
+    
+    this.showStatus('Carregando catálogo de materiais...', 'info');
+    this.showLoading(true);
+    
+    this.fetchJSONP({ acao: 'listar_catalogos' }, (res) => {
+    this.showLoading(false);
+    
+    if (res.sucesso) {
+    estado.catalogo = [...(res.materiais || []), ...(res.servicos || [])];
+    this.showStatus(`Catálogo carregado: ${estado.catalogo.length} itens`, 'success');
+    
+    if (editor) {
+    editor.popularSelectMateriais();
+    }
+    } else {
+    this.showStatus('Erro ao carregar catálogo: ' + res.mensagem, 'error');
+    }
+    });
+    },
+    
+    loadObras: function() {
+    if (!estado.usuario) return;
+    
+    this.showStatus('Carregando obras...', 'info');
+    this.showLoading(true);
+    
+    this.fetchJSONP({ acao: 'resolver_obra', termo: '' }, (res) => {
+    this.showLoading(false);
+    
+    if (res.sucesso) {
+    estado.obras = res.obras || [];
+    estado.currentPage = 1;
+    estado.totalPages = Math.ceil(estado.obras.length / CONFIG.itemsPerPage);
+    
+    this.renderTable();
+    this.showStatus(`${estado.obras.length} obras carregadas`, 'success');
+    } else {
+    this.showStatus('Erro ao carregar obras: ' + res.mensagem, 'error');
+    }
+    });
+    },
+    
+    search: function() {
+    if (!estado.usuario) {
+    alert('Faça login primeiro');
+    return;
+    }
+    
+    const term = document.getElementById('search-input').value.trim();
+    
+    if (!term) {
+    this.loadObras();
+    estado.filtroAtivo = false;
+    return;
+    }
+    
+    this.showStatus(`Buscando por: "${term}"...`, 'info');
+    this.showLoading(true);
+    
+    this.fetchJSONP({ acao: 'resolver_obra', termo: term }, (res) => {
+    this.showLoading(false);
+    
+    if (res.sucesso) {
+    const obrasFiltradas = res.obras || [];
+    
+    estado.obras = obrasFiltradas;
+    estado.currentPage = 1;
+    estado.totalPages = Math.ceil(obrasFiltradas.length / CONFIG.itemsPerPage);
+    estado.filtroAtivo = true;
+    
+    this.renderTable();
+    
+    if (obrasFiltradas.length === 0) {
+    this.showStatus(`Nenhuma obra encontrada para: "${term}"`, 'warning');
+    } else {
+    this.showStatus(`${obrasFiltradas.length} obras encontradas`, 'success');
+    }
+    } else {
+    this.showStatus('Erro na busca: ' + res.mensagem, 'error');
+    }
+    });
+    },
+    
+    sincronizarObras: function() {
+    if (!estado.usuario) return;
+    
+    if (!confirm('Deseja sincronizar os dados da base bruta?')) return;
+    
+    this.showStatus('Sincronizando obras...', 'info');
+    this.showLoading(true);
+    
+    this.fetchJSONP({ acao: 'sincronizar_obras' }, (res) => {
+    this.showLoading(false);
+    
+    if (res.sucesso) {
+    // Backend agora devolve: mensagem, total, novas, atualizadas
+    if (res.mensagem) {
+    this.showStatus(res.mensagem, 'success');
+    } else {
+    this.showStatus(
+    `Sincronização concluída: ${res.total || 0} obras; ${res.novas || 0} novas; ${res.atualizadas || 0} atualizadas`,
+    'success'
+    );
+    }
+    this.loadObras();
+    } else {
+    this.showStatus('Erro na sincronização: ' + (res.mensagem || ''), 'error');
+    }
+    });
+    },
+    
+    renderTable: function() {
+    const tbody = document.getElementById('table-body');
+    const startIndex = (estado.currentPage - 1) * CONFIG.itemsPerPage;
+    const endIndex = startIndex + CONFIG.itemsPerPage;
+    const obrasToShow = estado.obras.slice(startIndex, endIndex);
+    
+    tbody.innerHTML = '';
+    
+    if (obrasToShow.length === 0) {
+    tbody.innerHTML = `
+    <tr>
+    <td colspan="7" style="text-align: center; padding: 30px; color: var(--win-dark);">
+    ${estado.filtroAtivo ? 'Nenhuma obra encontrada com os filtros atuais' : 'Nenhuma obra cadastrada'}
+    </td>
+    </tr>
+    `;
+    } else {
+    obrasToShow.forEach(obra => {
+    const statusColor = 
+    obra.STATUS === 'CONCLUIDO' ? 'bg-ok' :
+    obra.STATUS === 'PENDENTE' ? 'bg-err' :
+    obra.STATUS === 'DEVOLVIDO' ? 'bg-warn' : 'bg-warn';
+    
+    const tr = document.createElement('tr');
+    tr.onclick = () => editor.open(obra);
+    tr.title = `Clique para editar ${obra.COD_OBRA_NUM}`;
+    
+    tr.innerHTML = `
+    <td><strong>${obra.COD_OBRA_NUM}</strong></td>
+    <td title="${obra.DESCRICAO}">${obra.DESCRICAO.substring(0, 50)}${obra.DESCRICAO.length > 50 ? '...' : ''}</td>
+    <td>${obra.TECNICO || '-'}</td>
+    <td>${obra.OPERADORA || '-'}</td>
+    <td><span class="badge ${statusColor}">${obra.STATUS || 'PENDENTE'}</span></td>
+    <td title="${obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || 'Sem pendências'}">
+    ${(obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '').substring(0, 20)}${(obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '').length > 20 ? '...' : ''}
+    </td>
+    <td>
+    <button class="btn-98" onclick="event.stopPropagation(); editor.open(${JSON.stringify(obra).replace(/"/g, '&quot;')})">
+    Abrir
+    </button>
+    </td>
+    `;
+    tbody.appendChild(tr);
+    });
+    }
+    
+    document.getElementById('page-info').textContent = 
+    `Página ${estado.currentPage} de ${estado.totalPages}`;
+    document.getElementById('record-count').textContent = 
+    `${estado.obras.length} registros`;
+    },
+    
+    prevPage: function() {
+    if (estado.currentPage > 1) {
+    estado.currentPage--;
+    this.renderTable();
+    }
+    },
+    
+    nextPage: function() {
+    if (estado.currentPage < estado.totalPages) {
+    estado.currentPage++;
+    this.renderTable();
+    }
+    },
+    
+    showLoading: function(show) {
+    document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+    },
+    
+    fetchJSONP: function(params, callback) {
+    const script = document.createElement('script');
+    const callbackName = 'cb_' + Math.round(10000 * Math.random());
+    
+    this.showLoading(true);
+    
+    window[callbackName] = (data) => {
+    delete window[callbackName];
+    document.body.removeChild(script);
+    this.showLoading(false);
+    callback(data);
+    };
+    
+    const query = new URLSearchParams(params).toString();
+    script.src = `${GAS_URL}?${query}&callback=${callbackName}`;
+    script.onerror = () => {
+    this.showLoading(false);
+    this.showStatus('Erro de comunicação com o servidor', 'error');
+    alert("Erro de comunicação com o servidor GAS.");
+    };
+    
+    document.body.appendChild(script);
+    }
+    };
 
-        // =============================================
-        // EDITOR DE OBRA
-        // =============================================
-        const editor = {
-            currentObra: null,
-            cart: [],
-            
-            open: function(obra) {
-                this.currentObra = obra;
-                this.cart = [];
-                
-                document.getElementById('ed-id').value = obra.COD_OBRA_NUM;
-                document.getElementById('ed-title').textContent = `Editando: ${obra.COD_OBRA_NUM} - ${obra.OPERADORA || ''}`;
-                document.getElementById('ed-tecnico').value = obra.TECNICO || '';
-                document.getElementById('ed-operadora').value = obra.OPERADORA || '';
-                document.getElementById('ed-endereco').value = obra.ENDERECO || '';
-                
-                document.getElementById('ed-mascara').value = obra.MASCARA_BA || '';
-                document.getElementById('ed-aplicacao').value = obra.APLICACAO_FEITA || '';
-                document.getElementById('ed-pendencia').value = obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '';
-                
-                document.getElementById('uploaded-urls').value = '';
-                document.getElementById('file-list').innerHTML = '';
-                document.getElementById('existing-fotos').innerHTML = '';
-                document.getElementById('upload-status').style.display = 'none';
-                
-                this.popularSelectMateriais();
-                this.parseAppString(obra.APLICACAO_FEITA);
-                
-                document.getElementById('editor-modal').style.display = 'flex';
-                this.tab('dados');
-            },
-            
-            close: function() {
-                if (this.hasUnsavedChanges()) {
-                    if (!confirm('Há alterações não salvas. Deseja realmente fechar?')) {
-                        return;
-                    }
-                }
-                
-                document.getElementById('editor-modal').style.display = 'none';
-                this.currentObra = null;
-                this.cart = [];
-            },
-            
-            hasUnsavedChanges: function() {
-                const mascara = document.getElementById('ed-mascara').value;
-                const pendencia = document.getElementById('ed-pendencia').value;
-                return mascara !== '' || pendencia !== '' || this.cart.length > 0;
-            },
-            
-            tab: function(name) {
-                document.querySelectorAll('.tab-section').forEach(el => {
-                    el.classList.add('section-hidden');
-                });
-                
-                document.querySelectorAll('.tab').forEach(el => {
-                    el.classList.remove('active');
-                });
-                
-                document.getElementById(`tab-${name}`).classList.remove('section-hidden');
-                
-                const tabs = document.querySelectorAll('.tab');
-                for (let i = 0; i < tabs.length; i++) {
-                    if (tabs[i].textContent.includes(name.charAt(0).toUpperCase() + name.slice(1))) {
-                        tabs[i].classList.add('active');
-                        break;
-                    }
-                }
-            },
-            
-            popularSelectMateriais: function() {
-                const select = document.getElementById('mat-select');
-                select.innerHTML = '<option value="">Selecione um material...</option>';
-                
-                if (estado.catalogo.length === 0) {
-                    const option = document.createElement('option');
-                    option.value = '';
-                    option.textContent = 'Carregando catálogo...';
-                    select.appendChild(option);
-                    return;
-                }
-                
-                estado.catalogo.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.cod;
-                    option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
-                    select.appendChild(option);
-                });
-            },
-            
-            filterMat: function() {
-                const term = document.getElementById('mat-search').value.toLowerCase();
-                const select = document.getElementById('mat-select');
-                
-                select.innerHTML = '<option value="">Selecione um material...</option>';
-                
-                const filtered = estado.catalogo.filter(item => 
-                    item.cod.toLowerCase().includes(term) || 
-                    item.desc.toLowerCase().includes(term)
-                );
-                
-                filtered.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.cod;
-                    option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
-                    select.appendChild(option);
-                });
-                
-                if (filtered.length === 0) {
-                    const option = document.createElement('option');
-                    option.value = '';
-                    option.textContent = 'Nenhum material encontrado';
-                    select.appendChild(option);
-                }
-            },
-            
-            addMaterial: function() {
-                const select = document.getElementById('mat-select');
-                const cod = select.value;
-                
-                if (!cod) {
-                    alert('Selecione um material primeiro');
-                    return;
-                }
-                
-                const qtd = parseInt(document.getElementById('mat-qtd').value) || 1;
-                const selectedOption = select.options[select.selectedIndex];
-                const descFull = selectedOption.textContent;
-                const desc = descFull.split(' - ')[1]?.split(' (')[0] || descFull;
-                
-                const existingIndex = this.cart.findIndex(item => item.cod === cod);
-                
-                if (existingIndex >= 0) {
-                    this.cart[existingIndex].qtd += qtd;
-                } else {
-                    this.cart.push({
-                        cod: cod,
-                        desc: desc,
-                        qtd: qtd,
-                        unidade: estado.catalogo.find(item => item.cod === cod)?.unidade || 'un'
-                    });
-                }
-                
-                this.renderCart();
-                document.getElementById('mat-qtd').value = 1;
-            },
-            
-            removeMaterial: function(index) {
-                this.cart.splice(index, 1);
-                this.renderCart();
-            },
-            
-            renderCart: function() {
-                const tbody = document.getElementById('cart-list');
-                
-                if (this.cart.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
-                                Nenhum material adicionado ao carrinho
-                            </td></tr>
-                    `;
-                } else {
-                    tbody.innerHTML = '';
-                    let appString = [];
-                    
-                    this.cart.forEach((item, index) => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td style="text-align: center; font-weight: bold;">${item.qtd}</td>
-                            <td>${item.desc}</td>
-                            <td style="font-family: 'Courier New', monospace;">${item.cod}</td>
-                            <td style="text-align: center;">
-                                <button class="cart-item-remove" onclick="editor.removeMaterial(${index})" 
-                                        title="Remover item">X</button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                        
-                        appString.push(`[${item.cod.startsWith('SERV') ? 'SERV' : 'MAT'}] ${item.qtd}x ${item.desc} (${item.cod})`);
-                    });
-                    
-                    document.getElementById('ed-aplicacao').value = appString.join(' | ');
-                }
-            },
-            
-            parseAppString: function(str) {
-                if (!str || typeof str !== 'string') return;
-                
-                const parts = str.split(' | ');
-                this.cart = [];
-                
-                parts.forEach(part => {
-                    const match = part.match(/\[(MAT|SERV)\] (\d+)x (.+) \((.+)\)/);
-                    
-                    if (match) {
-                        const [, tipo, qtd, desc, cod] = match;
-                        this.cart.push({
-                            cod: cod,
-                            desc: desc.trim(),
-                            qtd: parseInt(qtd),
-                            tipo: tipo
-                        });
-                    }
-                });
-                
-                this.renderCart();
-            },
-            
-            uploadFiles: function() {
-                const fileInput = document.getElementById('file-input');
-                const files = fileInput.files;
-                
-                if (files.length === 0) {
-                    this.showUploadStatus('Selecione arquivos primeiro', 'error');
-                    return;
-                }
-                
-                this.showUploadStatus(`Enviando ${files.length} arquivo(s)...`, 'info');
-                
-                setTimeout(() => {
-                    const urls = [];
-                    const fileList = document.getElementById('file-list');
-                    fileList.innerHTML = '';
-                    
-                    for (let i = 0; i < Math.min(files.length, 5); i++) {
-                        const file = files[i];
-                        const fakeUrl = `https://fakeimg.pl/400x300/008080/ffffff?text=Foto${i+1}_${this.currentObra.COD_OBRA_NUM}`;
-                        urls.push(fakeUrl);
-                        
-                        fileList.innerHTML += `
-                            <div class="flex-row" style="margin-bottom: 3px;">
-                                <span>✅ ${file.name} (${Math.round(file.size/1024)}KB)</span>
-                            </div>
-                        `;
-                    }
-                    
-                    document.getElementById('uploaded-urls').value = urls.join(' | ');
-                    this.showUploadStatus(`${files.length} arquivo(s) enviados com sucesso!`, 'success');
-                    
-                    this.showExistingFotos(urls);
-                }, 2000);
-            },
-            
-            clearFiles: function() {
-                document.getElementById('file-input').value = '';
-                document.getElementById('file-list').innerHTML = '';
-                document.getElementById('uploaded-urls').value = '';
-                document.getElementById('upload-status').style.display = 'none';
-                document.getElementById('existing-fotos').innerHTML = '';
-            },
-            
-            showUploadStatus: function(msg, type) {
-                const statusEl = document.getElementById('upload-status');
-                statusEl.textContent = msg;
-                statusEl.className = `alert alert-${type}`;
-                statusEl.style.display = 'block';
-            },
-            
-            showExistingFotos: function(urls) {
-                const container = document.getElementById('existing-fotos');
-                container.innerHTML = '';
-                
-                urls.forEach((url, index) => {
-                    container.innerHTML += `
-                        <div style="position: relative;">
-                            <img src="${url}" style="width: 100%; height: 80px; object-fit: cover; border: 1px solid var(--win-dark);">
-                            <div style="position: absolute; bottom: 0; right: 0; background: rgba(0,0,0,0.7); color: white; font-size: 10px; padding: 1px 3px;">
-                                Foto ${index+1}
-                            </div>
-                        </div>
-                    `;
-                });
-            },
-            
-            testRDO: function() {
-                this.showSaveStatus('Testando geração de RDO...', 'info');
-                
-                setTimeout(() => {
-                    const missingFields = [];
-                    
-                    if (!document.getElementById('ed-mascara').value) {
-                        missingFields.push('Máscara BA');
-                    }
-                    
-                    if (this.cart.length === 0) {
-                        missingFields.push('Materiais aplicados');
-                    }
-                    
-                    if (missingFields.length > 0) {
-                        this.showSaveStatus(`Atenção: Faltam ${missingFields.join(', ')}`, 'warning');
-                        alert(`Para gerar o RDO completo, preencha:\n\n• ${missingFields.join('\n• ')}`);
-                    } else {
-                        this.showSaveStatus('✅ Teste concluído: RDO pode ser gerado', 'success');
-                    }
-                }, 1000);
-            },
-            
-            save: function(gerarRDO = false) {
-                if (!this.currentObra) return;
-                
-                const params = {
-                    acao: gerarRDO ? 'gerar_rdo_e_enviar' : 'atualizar_anotacoes_obra',
-                    codObra: document.getElementById('ed-id').value,
-                    mascaraBa: document.getElementById('ed-mascara').value,
-                    aplicacaoFeita: document.getElementById('ed-aplicacao').value,
-                    pendencia: document.getElementById('ed-pendencia').value,
-                    fileUrls: document.getElementById('uploaded-urls').value,
-                    usuario: estado.usuario
-                };
+    // ====
+    // EDITOR DE OBRA
+    // ====
+    const editor = {
+    currentObra: null,
+    cart: [],
+    
+    open: function(obra) {
+    this.currentObra = obra;
+    this.cart = [];
+    
+    document.getElementById('ed-id').value = obra.COD_OBRA_NUM;
+    document.getElementById('ed-title').textContent = `Editando: ${obra.COD_OBRA_NUM} - ${obra.OPERADORA || ''}`;
+    document.getElementById('ed-tecnico').value = obra.TECNICO || '';
+    document.getElementById('ed-operadora').value = obra.OPERADORA || '';
+    document.getElementById('ed-endereco').value = obra.ENDERECO || '';
+    
+    document.getElementById('ed-mascara').value = obra.MASCARA_BA || '';
+    document.getElementById('ed-aplicacao').value = obra.APLICACAO_FEITA || '';
+    document.getElementById('ed-pendencia').value = obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '';
+    
+    document.getElementById('uploaded-urls').value = '';
+    document.getElementById('file-list').innerHTML = '';
+    document.getElementById('existing-fotos').innerHTML = '';
+    document.getElementById('upload-status').style.display = 'none';
+    
+    this.popularSelectMateriais();
+    this.parseAppString(obra.APLICACAO_FEITA);
+    
+    document.getElementById('editor-modal').style.display = 'flex';
+    this.tab('dados');
+    },
+    
+    close: function() {
+    if (this.hasUnsavedChanges()) {
+    if (!confirm('Há alterações não salvas. Deseja realmente fechar?')) {
+    return;
+    }
+    }
+    
+    document.getElementById('editor-modal').style.display = 'none';
+    this.currentObra = null;
+    this.cart = [];
+    },
+    
+    hasUnsavedChanges: function() {
+    const mascara = document.getElementById('ed-mascara').value;
+    const pendencia = document.getElementById('ed-pendencia').value;
+    return mascara !== '' || pendencia !== '' || this.cart.length > 0;
+    },
+    
+    tab: function(name) {
+    document.querySelectorAll('.tab-section').forEach(el => {
+    el.classList.add('section-hidden');
+    });
+    
+    document.querySelectorAll('.tab').forEach(el => {
+    el.classList.remove('active');
+    });
+    
+    document.getElementById(`tab-${name}`).classList.remove('section-hidden');
+    
+    const tabs = document.querySelectorAll('.tab');
+    for (let i = 0; i < tabs.length; i++) {
+    if (tabs[i].textContent.includes(name.charAt(0).toUpperCase() + name.slice(1))) {
+    tabs[i].classList.add('active');
+    break;
+    }
+    }
+    },
+    
+    popularSelectMateriais: function() {
+    const select = document.getElementById('mat-select');
+    select.innerHTML = '<option value="">Selecione um material...</option>';
+    
+    if (estado.catalogo.length === 0) {
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = 'Carregando catálogo...';
+    select.appendChild(option);
+    return;
+    }
+    
+    estado.catalogo.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item.cod;
+    option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
+    select.appendChild(option);
+    });
+    },
+    
+    filterMat: function() {
+    const term = document.getElementById('mat-search').value.toLowerCase();
+    const select = document.getElementById('mat-select');
+    
+    select.innerHTML = '<option value="">Selecione um material...</option>';
+    
+    const filtered = estado.catalogo.filter(item => 
+    item.cod.toLowerCase().includes(term) || 
+    item.desc.toLowerCase().includes(term)
+    );
+    
+    filtered.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item.cod;
+    option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
+    select.appendChild(option);
+    });
+    
+    if (filtered.length === 0) {
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = 'Nenhum material encontrado';
+    select.appendChild(option);
+    }
+    },
+    
+    addMaterial: function() {
+    const select = document.getElementById('mat-select');
+    const cod = select.value;
+    
+    if (!cod) {
+    alert('Selecione um material primeiro');
+    return;
+    }
+    
+    const qtd = parseInt(document.getElementById('mat-qtd').value) || 1;
+    const selectedOption = select.options[select.selectedIndex];
+    const descFull = selectedOption.textContent;
+    const desc = descFull.split(' - ')[1]?.split(' (')[0] || descFull;
+    
+    const existingIndex = this.cart.findIndex(item => item.cod === cod);
+    
+    if (existingIndex >= 0) {
+    this.cart[existingIndex].qtd += qtd;
+    } else {
+    this.cart.push({
+    cod: cod,
+    desc: desc,
+    qtd: qtd,
+    unidade: estado.catalogo.find(item => item.cod === cod)?.unidade || 'un'
+    });
+    }
+    
+    this.renderCart();
+    document.getElementById('mat-qtd').value = 1;
+    },
+    
+    removeMaterial: function(index) {
+    this.cart.splice(index, 1);
+    this.renderCart();
+    },
+    
+    renderCart: function() {
+    const tbody = document.getElementById('cart-list');
+    
+    if (this.cart.length === 0) {
+    tbody.innerHTML = `
+    <tr>
+    <td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
+    Nenhum material adicionado ao carrinho
+    </td></tr>
+    `;
+    } else {
+    tbody.innerHTML = '';
+    let appString = [];
+    
+    this.cart.forEach((item, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+    <td style="text-align: center; font-weight: bold;">${item.qtd}</td>
+    <td>${item.desc}</td>
+    <td style="font-family: 'Courier New', monospace;">${item.cod}</td>
+    <td style="text-align: center;">
+    <button class="cart-item-remove" onclick="editor.removeMaterial(${index})" 
+    title="Remover item">X</button>
+    </td>
+    `;
+    tbody.appendChild(tr);
+    
+    appString.push(`[${item.cod.startsWith('SERV') ? 'SERV' : 'MAT'}] ${item.qtd}x ${item.desc} (${item.cod})`);
+    });
+    
+    document.getElementById('ed-aplicacao').value = appString.join(' | ');
+    }
+    },
+    
+    parseAppString: function(str) {
+    if (!str || typeof str !== 'string') return;
+    
+    const parts = str.split(' | ');
+    this.cart = [];
+    
+    parts.forEach(part => {
+    const match = part.match(/\[(MAT|SERV)\] (\d+)x (.+) \((.+)\)/);
+    
+    if (match) {
+    const [, tipo, qtd, desc, cod] = match;
+    this.cart.push({
+    cod: cod,
+    desc: desc.trim(),
+    qtd: parseInt(qtd),
+    tipo: tipo
+    });
+    }
+    });
+    
+    this.renderCart();
+    },
+    
+    uploadFiles: function() {
+    const fileInput = document.getElementById('file-input');
+    const files = fileInput.files;
+    
+    if (files.length === 0) {
+    this.showUploadStatus('Selecione arquivos primeiro', 'error');
+    return;
+    }
+    
+    this.showUploadStatus(`Enviando ${files.length} arquivo(s)...`, 'info');
+    
+    setTimeout(() => {
+    const urls = [];
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = '';
+    
+    for (let i = 0; i < Math.min(files.length, 5); i++) {
+    const file = files[i];
+    const fakeUrl = `https://fakeimg.pl/400x300/008080/ffff?text=Foto${i+1}_${this.currentObra.COD_OBRA_NUM}`;
+    urls.push(fakeUrl);
+    
+    fileList.innerHTML += `
+    <div class="flex-row" style="margin-bottom: 3px;">
+    <span>✅ ${file.name} (${Math.round(file.size/1024)}KB)</span>
+    </div>
+    `;
+    }
+    
+    document.getElementById('uploaded-urls').value = urls.join(' | ');
+    this.showUploadStatus(`${files.length} arquivo(s) enviados com sucesso!`, 'success');
+    
+    this.showExistingFotos(urls);
+    }, 2000);
+    },
+    
+    clearFiles: function() {
+    document.getElementById('file-input').value = '';
+    document.getElementById('file-list').innerHTML = '';
+    document.getElementById('uploaded-urls').value = '';
+    document.getElementById('upload-status').style.display = 'none';
+    document.getElementById('existing-fotos').innerHTML = '';
+    },
+    
+    showUploadStatus: function(msg, type) {
+    const statusEl = document.getElementById('upload-status');
+    statusEl.textContent = msg;
+    statusEl.className = `alert alert-${type}`;
+    statusEl.style.display = 'block';
+    },
+    
+    showExistingFotos: function(urls) {
+    const container = document.getElementById('existing-fotos');
+    container.innerHTML = '';
+    
+    urls.forEach((url, index) => {
+    container.innerHTML += `
+    <div style="position: relative;">
+    <img src="${url}" style="width: 100%; height: 80px; object-fit: cover; border: 1px solid var(--win-dark);">
+    <div style="position: absolute; bottom: 0; right: 0; background: rgba(0,0,0,0.7); color: white; font-size: 10px; padding: 1px 3px;">
+    Foto ${index+1}
+    </div>
+    </div>
+    `;
+    });
+    },
+    
+    testRDO: function() {
+    this.showSaveStatus('Testando geração de RDO...', 'info');
+    
+    setTimeout(() => {
+    const missingFields = [];
+    
+    if (!document.getElementById('ed-mascara').value) {
+    missingFields.push('Máscara BA');
+    }
+    
+    if (this.cart.length === 0) {
+    missingFields.push('Materiais aplicados');
+    }
+    
+    if (missingFields.length > 0) {
+    this.showSaveStatus(`Atenção: Faltam ${missingFields.join(', ')}`, 'warning');
+    alert(`Para gerar o RDO completo, preencha:\n\n• ${missingFields.join('\n• ')}`);
+    } else {
+    this.showSaveStatus('✅ Teste concluído: RDO pode ser gerado', 'success');
+    }
+    }, 1000);
+    },
+    
+    save: function(gerarRDO = false) {
+    if (!this.currentObra) return;
+    
+    const params = {
+    acao: gerarRDO ? 'gerar_rdo_e_enviar' : 'atualizar_anotacoes_obra',
+    codObra: document.getElementById('ed-id').value,
+    mascaraBa: document.getElementById('ed-mascara').value,
+    aplicacaoFeita: document.getElementById('ed-aplicacao').value,
+    pendencia: document.getElementById('ed-pendencia').value,
+    fileUrls: document.getElementById('uploaded-urls').value,
+    usuario: estado.usuario
+    };
 
-                const statusEl = document.getElementById('save-status');
-                
-                if (gerarRDO) {
-                    statusEl.textContent = '🚀 Gerando RDO...';
-                } else {
-                    statusEl.textContent = '💾 Salvando...';
-                }
-                
-                statusEl.style.color = 'blue';
-                
-                sys.fetchJSONP(params, (res) => {
-                    if (res.sucesso) {
-                        statusEl.textContent = '✅ Sucesso!';
-                        statusEl.style.color = 'green';
-                        
-                        if (gerarRDO) {
-                            if (res.auditoria) {
-                                alert(`RDO Gerado!\n\nAuditoria:\n${res.auditoria}\n\nURL: ${res.fileUrl}`);
-                            } else {
-                                alert(`RDO Gerado com sucesso!\n\nURL: ${res.fileUrl}`);
-                            }
-                            
-                            if (res.fileUrl) {
-                                window.open(res.fileUrl, '_blank');
-                            }
-                        } else {
-                            setTimeout(() => this.close(), 500);
-                        }
-                        
-                        sys.showStatus(`Obra ${params.codObra} salva com sucesso!`, 'success');
-                        sys.search();
-                        
-                    } else {
-                        statusEl.textContent = '❌ Erro: ' + res.mensagem;
-                        statusEl.style.color = 'red';
-                        alert("Erro: " + res.mensagem);
-                    }
-                });
-            },
-            
-            showSaveStatus: function(msg, type) {
-                const statusEl = document.getElementById('save-status');
-                statusEl.textContent = msg;
-                
-                switch(type) {
-                    case 'success':
-                        statusEl.style.color = 'green';
-                        break;
-                    case 'error':
-                        statusEl.style.color = 'red';
-                        break;
-                    case 'warning':
-                        statusEl.style.color = 'orange';
-                        break;
-                    default:
-                        statusEl.style.color = 'blue';
-                }
-            }
-        };
+    const statusEl = document.getElementById('save-status');
+    
+    if (gerarRDO) {
+    statusEl.textContent = '🚀 Gerando RDO...';
+    } else {
+    statusEl.textContent = '💾 Salvando...';
+    }
+    
+    statusEl.style.color = 'blue';
+    
+    sys.fetchJSONP(params, (res) => {
+    if (res.sucesso) {
+    statusEl.textContent = '✅ Sucesso!';
+    statusEl.style.color = 'green';
+    
+    if (gerarRDO) {
+    if (res.auditoria) {
+    alert(`RDO Gerado!\n\nAuditoria:\n${res.auditoria}\n\nURL: ${res.fileUrl}`);
+    } else {
+    alert(`RDO Gerado com sucesso!\n\nURL: ${res.fileUrl}`);
+    }
+    
+    if (res.fileUrl) {
+    window.open(res.fileUrl, '_blank');
+    }
+    } else {
+    setTimeout(() => this.close(), 500);
+    }
+    
+    sys.showStatus(`Obra ${params.codObra} salva com sucesso!`, 'success');
+    sys.search();
+    
+    } else {
+    statusEl.textContent = '❌ Erro: ' + res.mensagem;
+    statusEl.style.color = 'red';
+    alert("Erro: " + res.mensagem);
+    }
+    });
+    },
+    
+    showSaveStatus: function(msg, type) {
+    const statusEl = document.getElementById('save-status');
+    statusEl.textContent = msg;
+    
+    switch(type) {
+    case 'success':
+    statusEl.style.color = 'green';
+    break;
+    case 'error':
+    statusEl.style.color = 'red';
+    break;
+    case 'warning':
+    statusEl.style.color = 'orange';
+    break;
+    default:
+    statusEl.style.color = 'blue';
+    }
+    }
+    };
 
-        // =============================================
-        // INICIALIZAÇÃO
-        // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            sys.init();
-            
-            const uploadArea = document.querySelector('.file-upload-area');
-            if (uploadArea) {
-                uploadArea.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.style.background = 'var(--bg-warn)';
-                });
-                
-                uploadArea.addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    this.style.background = 'var(--bg-ok)';
-                });
-                
-                uploadArea.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.style.background = 'var(--bg-ok)';
-                    
-                    const files = e.dataTransfer.files;
-                    const fileInput = document.getElementById('file-input');
-                    
-                    const dt = new DataTransfer();
-                    for (let i = 0; i < fileInput.files.length; i++) {
-                        dt.items.add(fileInput.files[i]);
-                    }
-                    for (let i = 0; i < files.length; i++) {
-                        dt.items.add(files[i]);
-                    }
-                    
-                    fileInput.files = dt.files;
-                    
-                    const fileList = document.getElementById('file-list');
-                    fileList.innerHTML = '';
-                    for (let i = 0; i < fileInput.files.length; i++) {
-                        fileList.innerHTML += `
-                            <div class="flex-row" style="margin-bottom: 3px;">
-                                <span>📎 ${fileInput.files[i].name} (${Math.round(fileInput.files[i].size/1024)}KB)</span>
-                            </div>
-                        `;
-                    }
-                    
-                    if (fileInput.files.length > 0) {
-                        editor.showUploadStatus(`${fileInput.files.length} arquivo(s) prontos para upload`, 'info');
-                    }
-                });
-            }
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('editor-modal').style.display === 'flex') {
-                        editor.close();
-                    }
-                }
-            });
-            
-            document.getElementById('login-password').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    sys.login();
-                }
-            });
-            
-            document.title = `SID 98 Enterprise v${CONFIG.versao} - ${CONFIG.empresa}`;
-            
-            console.log('Sistema SID 98 Enterprise inicializado com sucesso!');
-        });
+    // ====
+    // INICIALIZAÇÃO
+    // ====
+    document.addEventListener('DOMContentLoaded', function() {
+    sys.init();
+    
+    const uploadArea = document.querySelector('.file-upload-area');
+    if (uploadArea) {
+    uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.style.background = 'var(--bg-warn)';
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    this.style.background = 'var(--bg-ok)';
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.style.background = 'var(--bg-ok)';
+    
+    const files = e.dataTransfer.files;
+    const fileInput = document.getElementById('file-input');
+    
+    const dt = new DataTransfer();
+    for (let i = 0; i < fileInput.files.length; i++) {
+    dt.items.add(fileInput.files[i]);
+    }
+    for (let i = 0; i < files.length; i++) {
+    dt.items.add(files[i]);
+    }
+    
+    fileInput.files = dt.files;
+    
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = '';
+    for (let i = 0; i < fileInput.files.length; i++) {
+    fileList.innerHTML += `
+    <div class="flex-row" style="margin-bottom: 3px;">
+    <span>📎 ${fileInput.files[i].name} (${Math.round(fileInput.files[i].size/1024)}KB)</span>
+    </div>
+    `;
+    }
+    
+    if (fileInput.files.length > 0) {
+    editor.showUploadStatus(`${fileInput.files.length} arquivo(s) prontos para upload`, 'info');
+    }
+    });
+    }
+    
+    document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+    if (document.getElementById('editor-modal').style.display === 'flex') {
+    editor.close();
+    }
+    }
+    });
+    
+    document.getElementById('login-password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+    sys.login();
+    }
+    });
+    
+    document.title = `SID 98 Enterprise v${CONFIG.versao} - ${CONFIG.empresa}`;
+    
+    console.log('Sistema SID 98 Enterprise inicializado com sucesso!');
+    });
     </script>
 </body>
 </html>
