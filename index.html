@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SID 98 Enterprise - TelTelecom v7.2</title>
+    <title>SID 98 Enterprise - TelTelecom v7.4</title>
     <style>
     :root {
     --bg-color: #008080;
@@ -436,7 +436,7 @@
     <div class="win98-inset" style="padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
     <div style="text-align: center; margin-bottom: 10px;">
     <div style="font-size: 24px; color: var(--win-blue-start);">SID 98</div>
-    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.2</div>
+    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.4</div>
     </div>
     
     <div class="form-group">
@@ -462,7 +462,7 @@
     
     <div style="font-size: 10px; color: var(--win-dark); text-align: center;">
     Sistema Integrado de Dados 98 Enterprise<br>
-    © 2024 TelTelecom - v7.2.1
+    © 2024 TelTelecom - v7.4.0
     </div>
     </div>
     </div>
@@ -471,7 +471,7 @@
     <div class="title-bar">
     <span class="flex-row">
     <span style="margin-right: 5px;">🖥️</span>
-    SID 98 Enterprise v7.2 - TelTelecom
+    SID 98 Enterprise v7.4 - TelTelecom
     </span>
     <div class="flex-row">
     <button class="btn-98" style="padding: 0 4px; min-width: 20px;" title="Minimizar">_</button>
@@ -706,7 +706,6 @@
     
     <div class="section-header">Fotos já Anexadas</div>
     <div id="existing-fotos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px;">
-    <!-- Fotos existentes aparecerão aqui -->
     </div>
     </div>
 
@@ -757,7 +756,7 @@
     const CONFIG = {
     itemsPerPage: 20,
     empresa: 'TelTelecom',
-    versao: '7.2.1'
+    versao: '7.4.0'
     };
     
     const estado = {
@@ -1311,38 +1310,73 @@
     },
     
     uploadFiles: function() {
-    const fileInput = document.getElementById('file-input');
-    const files = fileInput.files;
-    
-    if (files.length === 0) {
-    this.showUploadStatus('Selecione arquivos primeiro', 'error');
-    return;
-    }
-    
-    this.showUploadStatus(`Enviando ${files.length} arquivo(s)...`, 'info');
-    
-    setTimeout(() => {
-    const urls = [];
-    const fileList = document.getElementById('file-list');
-    fileList.innerHTML = '';
-    
-    for (let i = 0; i < Math.min(files.length, 5); i++) {
-    const file = files[i];
-    const fakeUrl = `https://fakeimg.pl/400x300/008080/ffff?text=Foto${i+1}_${this.currentObra.COD_OBRA_NUM}`;
-    urls.push(fakeUrl);
-    
-    fileList.innerHTML += `
-    <div class="flex-row" style="margin-bottom: 3px;">
-    <span>✅ ${file.name} (${Math.round(file.size/1024)}KB)</span>
-    </div>
-    `;
-    }
-    
-    document.getElementById('uploaded-urls').value = urls.join(' | ');
-    this.showUploadStatus(`${files.length} arquivo(s) enviados com sucesso!`, 'success');
-    
-    this.showExistingFotos(urls);
-    }, 2000);
+      const fileInput = document.getElementById('file-input');
+      const files = fileInput.files;
+
+      if (files.length === 0) {
+        this.showUploadStatus('Selecione arquivos primeiro', 'error');
+        return;
+      }
+
+      if (!estado.usuario) {
+        this.showUploadStatus('Faça login para enviar fotos', 'error');
+        return;
+      }
+
+      this.showUploadStatus(`Processando imagem...`, 'info');
+
+      const file = files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const rawData = e.target.result;
+        const base64 = rawData.split(',')[1];
+        const mimeType = rawData.split(';')[0].split(':')[1];
+
+        const payload = {
+          codObra: editor.currentObra.COD_OBRA_NUM,
+          nomeArquivo: file.name,
+          base64: base64,
+          mimeType: mimeType,
+          usuario: estado.usuario
+        };
+
+        editor.showUploadStatus('Enviando para o Google Drive... 🚀', 'warning');
+
+        // CORREÇÃO AQUI: Adicionamos o ?acao=upload_evidencias na URL
+        fetch(GAS_URL + '?acao=upload_evidencias', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.sucesso) {
+            editor.showUploadStatus('✅ Foto salva no Drive!', 'success');
+
+            const container = document.getElementById('existing-fotos');
+            container.innerHTML += `
+              <div style="position: relative; border: 2px solid green;">
+                <img src="${rawData}" style="width: 100%; height: 80px; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; background: green; color: white; font-size: 9px; padding: 2px;">SALVO</div>
+              </div>`;
+            
+            const currentUrls = document.getElementById('uploaded-urls').value;
+            const novaUrl = data.fileUrl || '';
+            if (novaUrl) {
+                document.getElementById('uploaded-urls').value = currentUrls ? currentUrls + ' | ' + novaUrl : novaUrl;
+            }
+            
+          } else {
+            editor.showUploadStatus('Erro no Drive: ' + data.mensagem, 'error');
+          }
+        })
+        .catch(erro => {
+          console.error(erro);
+          editor.showUploadStatus('Verifique a pasta do Drive (Possível sucesso)', 'warning');
+        });
+      };
+
+      reader.readAsDataURL(file);
     },
     
     clearFiles: function() {
