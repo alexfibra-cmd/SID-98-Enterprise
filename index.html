@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SID 98 Enterprise - TelTelecom v7.5</title>
+    <title>SID 98 Enterprise - TelTelecom v7.8</title>
     <style>
     :root {
     --bg-color: #008080;
@@ -436,7 +436,7 @@
     <div class="win98-inset" style="padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
     <div style="text-align: center; margin-bottom: 10px;">
     <div style="font-size: 24px; color: var(--win-blue-start);">SID 98</div>
-    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.5</div>
+    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.8</div>
     </div>
     
     <div class="form-group">
@@ -462,7 +462,7 @@
     
     <div style="font-size: 10px; color: var(--win-dark); text-align: center;">
     Sistema Integrado de Dados 98 Enterprise<br>
-    © 2024 TelTelecom - v7.5.0
+    © 2024 TelTelecom - v7.8
     </div>
     </div>
     </div>
@@ -471,7 +471,7 @@
     <div class="title-bar">
     <span class="flex-row">
     <span style="margin-right: 5px;">🖥️</span>
-    SID 98 Enterprise v7.5 - TelTelecom
+    SID 98 Enterprise v7.8 - TelTelecom
     </span>
     <div class="flex-row">
     <button class="btn-98" style="padding: 0 4px; min-width: 20px;" title="Minimizar">_</button>
@@ -751,13 +751,12 @@
     // ====
     // CONFIGURAÇÃO DO SISTEMA
     // ====
-    // Esta variável agora aponta para o próprio script, que devolve o HTML
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwk_1YazBMx2NZP5ooRTye-bYZF0bjfwoIoa2z8CPibuP2gpo1bduQqfvXU_BGFydLczQ/exec';
     
     const CONFIG = {
     itemsPerPage: 20,
     empresa: 'TelTelecom',
-    versao: '7.5.0'
+    versao: '7.8.0'
     };
     
     const estado = {
@@ -1113,7 +1112,12 @@
     this.cart = [];
     
     document.getElementById('ed-id').value = obra.COD_OBRA_NUM;
-    document.getElementById('ed-title').textContent = `Editando: ${obra.COD_OBRA_NUM} - ${obra.OPERADORA || ''}`;
+    
+    // === ATUALIZAÇÃO: Título Fixo com BA e Descrição ===
+    var descCurta = obra.DESCRICAO ? obra.DESCRICAO.substring(0, 40) : '';
+    document.getElementById('ed-title').textContent = `BA: ${obra.COD_OBRA_NUM} | ${descCurta}...`;
+    // ===================================================
+
     document.getElementById('ed-tecnico').value = obra.TECNICO || '';
     document.getElementById('ed-operadora').value = obra.OPERADORA || '';
     document.getElementById('ed-endereco').value = obra.ENDERECO || '';
