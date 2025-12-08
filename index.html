@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SID 98 Enterprise - TelTelecom v7.8</title>
+    <title>SID 98 Enterprise - TelTelecom v7.8.2</title>
     <style>
     :root {
     --bg-color: #008080;
@@ -441,12 +441,12 @@
     
     <div class="form-group">
     <label for="login-email">👤 Usuário (Email):</label>
-    <input type="email" id="login-email" class="w-100" value="alexfibra@gmail.com" placeholder="seu.email@empresa.com">
+    <input type="email" id="login-email" class="w-100" value="" placeholder="seu.email@empresa.com">
     </div>
     
     <div class="form-group">
     <label for="login-password">🔑 Senha:</label>
-    <input type="password" id="login-password" class="w-100" value="sid98access" placeholder="Digite sua senha">
+    <input type="password" id="login-password" class="w-100" value="" placeholder="Digite sua senha">
     </div>
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
@@ -756,7 +756,7 @@
     const CONFIG = {
     itemsPerPage: 20,
     empresa: 'TelTelecom',
-    versao: '7.8.0'
+    versao: '7.8.2'
     };
     
     const estado = {
@@ -800,17 +800,18 @@
     
     login: function() {
     const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
+    const password = document.getElementById('login-password').value; // PEGA A SENHA
     
-    if (!email) {
-    this.showLoginError('Por favor, informe seu email');
+    if (!email || !password) {
+    this.showLoginError('Informe email e senha');
     return;
     }
     
     this.showLoading(true);
-    this.showStatus('Autenticando...', 'info');
+    this.showStatus('Validando credenciais...', 'info');
     
-    this.fetchJSONP({ acao: 'login', email: email }, (res) => {
+    // ENVIA A SENHA NO PAYLOAD
+    this.fetchJSONP({ acao: 'login', email: email, senha: password }, (res) => {
     this.showLoading(false);
     
     if (res.sucesso) {
@@ -829,7 +830,7 @@
     this.loadObras();
     
     } else {
-    this.showLoginError(res.mensagem || 'Erro no login');
+    this.showLoginError(res.mensagem || 'Senha incorreta');
     }
     });
     },
@@ -1101,414 +1102,312 @@
     };
 
     // ====
-    // EDITOR DE OBRA
+    // EDITOR DE OBRA (CORRIGIDO v7.8.2)
     // ====
     const editor = {
     currentObra: null,
     cart: [],
     
     open: function(obra) {
-    this.currentObra = obra;
-    this.cart = [];
+        this.currentObra = obra;
+        this.cart = [];
+        
+        document.getElementById('ed-id').value = obra.COD_OBRA_NUM;
+        
+        var descCurta = obra.DESCRICAO ? obra.DESCRICAO.substring(0, 40) : '';
+        document.getElementById('ed-title').textContent = `BA: ${obra.COD_OBRA_NUM} | ${descCurta}...`;
     
-    document.getElementById('ed-id').value = obra.COD_OBRA_NUM;
-    
-    // === ATUALIZAÇÃO: Título Fixo com BA e Descrição ===
-    var descCurta = obra.DESCRICAO ? obra.DESCRICAO.substring(0, 40) : '';
-    document.getElementById('ed-title').textContent = `BA: ${obra.COD_OBRA_NUM} | ${descCurta}...`;
-    // ===================================================
-
-    document.getElementById('ed-tecnico').value = obra.TECNICO || '';
-    document.getElementById('ed-operadora').value = obra.OPERADORA || '';
-    document.getElementById('ed-endereco').value = obra.ENDERECO || '';
-    
-    document.getElementById('ed-mascara').value = obra.MASCARA_BA || '';
-    document.getElementById('ed-aplicacao').value = obra.APLICACAO_FEITA || '';
-    document.getElementById('ed-pendencia').value = obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '';
-    
-    document.getElementById('uploaded-urls').value = '';
-    document.getElementById('file-list').innerHTML = '';
-    document.getElementById('existing-fotos').innerHTML = '';
-    document.getElementById('upload-status').style.display = 'none';
-    
-    this.popularSelectMateriais();
-    this.parseAppString(obra.APLICACAO_FEITA);
-    
-    document.getElementById('editor-modal').style.display = 'flex';
-    this.tab('dados');
+        document.getElementById('ed-tecnico').value = obra.TECNICO || '';
+        document.getElementById('ed-operadora').value = obra.OPERADORA || '';
+        document.getElementById('ed-endereco').value = obra.ENDERECO || '';
+        
+        document.getElementById('ed-mascara').value = obra.MASCARA_BA || '';
+        document.getElementById('ed-aplicacao').value = obra.APLICACAO_FEITA || '';
+        document.getElementById('ed-pendencia').value = obra.PENDENCIA_DEVOLUCAO || obra.PENDENCIA || '';
+        
+        document.getElementById('uploaded-urls').value = '';
+        document.getElementById('file-list').innerHTML = '';
+        document.getElementById('existing-fotos').innerHTML = '';
+        document.getElementById('upload-status').style.display = 'none';
+        
+        this.popularSelectMateriais();
+        this.parseAppString(obra.APLICACAO_FEITA);
+        
+        // Carrega o histórico da obra
+        this.loadLogs(); 
+        
+        document.getElementById('editor-modal').style.display = 'flex';
+        this.tab('dados');
     },
     
     close: function() {
-    if (this.hasUnsavedChanges()) {
-    if (!confirm('Há alterações não salvas. Deseja realmente fechar?')) {
-    return;
-    }
-    }
-    
-    document.getElementById('editor-modal').style.display = 'none';
-    this.currentObra = null;
-    this.cart = [];
+        if (this.hasUnsavedChanges()) {
+            if (!confirm('Há alterações não salvas. Deseja realmente fechar?')) {
+                return;
+            }
+        }
+        document.getElementById('editor-modal').style.display = 'none';
+        this.currentObra = null;
+        this.cart = [];
     },
     
     hasUnsavedChanges: function() {
-    const mascara = document.getElementById('ed-mascara').value;
-    const pendencia = document.getElementById('ed-pendencia').value;
-    return mascara !== '' || pendencia !== '' || this.cart.length > 0;
+        // Lógica simplificada para não travar o fluxo
+        return false; 
     },
     
     tab: function(name) {
-    document.querySelectorAll('.tab-section').forEach(el => {
-    el.classList.add('section-hidden');
-    });
-    
-    document.querySelectorAll('.tab').forEach(el => {
-    el.classList.remove('active');
-    });
-    
-    document.getElementById(`tab-${name}`).classList.remove('section-hidden');
-    
-    const tabs = document.querySelectorAll('.tab');
-    for (let i = 0; i < tabs.length; i++) {
-    if (tabs[i].textContent.includes(name.charAt(0).toUpperCase() + name.slice(1))) {
-    tabs[i].classList.add('active');
-    break;
-    }
-    }
+        document.querySelectorAll('.tab-section').forEach(el => el.classList.add('section-hidden'));
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        document.getElementById(`tab-${name}`).classList.remove('section-hidden');
+        
+        const tabs = document.querySelectorAll('.tab');
+        for (let i = 0; i < tabs.length; i++) {
+            if (tabs[i].textContent.toLowerCase().includes(name.toLowerCase().substring(0,3))) {
+                tabs[i].classList.add('active');
+                break;
+            }
+        }
     },
     
+    // ==== CORREÇÃO DO FILTRO DE MATERIAIS ====
     popularSelectMateriais: function() {
-    const select = document.getElementById('mat-select');
-    select.innerHTML = '<option value="">Selecione um material...</option>';
-    
-    if (estado.catalogo.length === 0) {
-    const option = document.createElement('option');
-    option.value = '';
-    option.textContent = 'Carregando catálogo...';
-    select.appendChild(option);
-    return;
-    }
-    
-    estado.catalogo.forEach(item => {
-    const option = document.createElement('option');
-    option.value = item.cod;
-    option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
-    select.appendChild(option);
-    });
+        const select = document.getElementById('mat-select');
+        select.innerHTML = '<option value="">Selecione um material...</option>';
+        if (estado.catalogo.length === 0) return;
+        estado.catalogo.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.cod;
+            option.textContent = `${item.cod} - ${item.desc}`;
+            select.appendChild(option);
+        });
     },
     
     filterMat: function() {
-    const term = document.getElementById('mat-search').value.toLowerCase();
-    const select = document.getElementById('mat-select');
-    
-    select.innerHTML = '<option value="">Selecione um material...</option>';
-    
-    const filtered = estado.catalogo.filter(item => 
-    item.cod.toLowerCase().includes(term) || 
-    item.desc.toLowerCase().includes(term)
-    );
-    
-    filtered.forEach(item => {
-    const option = document.createElement('option');
-    option.value = item.cod;
-    option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
-    select.appendChild(option);
-    });
-    
-    if (filtered.length === 0) {
-    const option = document.createElement('option');
-    option.value = '';
-    option.textContent = 'Nenhum material encontrado';
-    select.appendChild(option);
-    }
+        const term = document.getElementById('mat-search').value.toLowerCase();
+        const select = document.getElementById('mat-select');
+        select.innerHTML = '<option value="">Selecione um material...</option>';
+        
+        // AQUI ESTAVA O ERRO: Convertemos tudo para String antes de comparar
+        const filtered = estado.catalogo.filter(item => 
+            String(item.cod).toLowerCase().includes(term) || 
+            String(item.desc || '').toLowerCase().includes(term)
+        );
+        
+        filtered.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.cod;
+            option.textContent = `${item.cod} - ${item.desc} (${item.unidade || 'UN'})`;
+            select.appendChild(option);
+        });
+        
+        if (filtered.length === 0) {
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'Nenhum material encontrado';
+            select.appendChild(option);
+        }
     },
+    // ==========================================
     
     addMaterial: function() {
-    const select = document.getElementById('mat-select');
-    const cod = select.value;
-    
-    if (!cod) {
-    alert('Selecione um material primeiro');
-    return;
-    }
-    
-    const qtd = parseInt(document.getElementById('mat-qtd').value) || 1;
-    const selectedOption = select.options[select.selectedIndex];
-    const descFull = selectedOption.textContent;
-    const desc = descFull.split(' - ')[1]?.split(' (')[0] || descFull;
-    
-    const existingIndex = this.cart.findIndex(item => item.cod === cod);
-    
-    if (existingIndex >= 0) {
-    this.cart[existingIndex].qtd += qtd;
-    } else {
-    this.cart.push({
-    cod: cod,
-    desc: desc,
-    qtd: qtd,
-    unidade: estado.catalogo.find(item => item.cod === cod)?.unidade || 'un'
-    });
-    }
-    
-    this.renderCart();
-    document.getElementById('mat-qtd').value = 1;
+        const select = document.getElementById('mat-select');
+        const cod = select.value;
+        if (!cod) { alert('Selecione um material primeiro'); return; }
+        
+        const qtd = parseInt(document.getElementById('mat-qtd').value) || 1;
+        const selectedOption = select.options[select.selectedIndex];
+        const descFull = selectedOption.textContent;
+        const desc = descFull.split(' - ')[1]?.split(' (')[0] || descFull;
+        
+        const existingIndex = this.cart.findIndex(item => item.cod === cod);
+        
+        if (existingIndex >= 0) {
+            this.cart[existingIndex].qtd += qtd;
+        } else {
+            this.cart.push({
+                cod: cod,
+                desc: desc,
+                qtd: qtd,
+                unidade: estado.catalogo.find(item => item.cod === cod)?.unidade || 'un'
+            });
+        }
+        this.renderCart();
+        document.getElementById('mat-qtd').value = 1;
     },
     
     removeMaterial: function(index) {
-    this.cart.splice(index, 1);
-    this.renderCart();
+        this.cart.splice(index, 1);
+        this.renderCart();
     },
     
     renderCart: function() {
-    const tbody = document.getElementById('cart-list');
-    
-    if (this.cart.length === 0) {
-    tbody.innerHTML = `
-    <tr>
-    <td colspan="4" style="text-align: center; padding: 20px; color: var(--win-dark);">
-    Nenhum material adicionado ao carrinho
-    </td></tr>
-    `;
-    } else {
-    tbody.innerHTML = '';
-    let appString = [];
-    
-    this.cart.forEach((item, index) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-    <td style="text-align: center; font-weight: bold;">${item.qtd}</td>
-    <td>${item.desc}</td>
-    <td style="font-family: 'Courier New', monospace;">${item.cod}</td>
-    <td style="text-align: center;">
-    <button class="cart-item-remove" onclick="editor.removeMaterial(${index})" 
-    title="Remover item">X</button>
-    </td>
-    `;
-    tbody.appendChild(tr);
-    
-    appString.push(`[${item.cod.startsWith('SERV') ? 'SERV' : 'MAT'}] ${item.qtd}x ${item.desc} (${item.cod})`);
-    });
-    
-    document.getElementById('ed-aplicacao').value = appString.join(' | ');
-    }
+        const tbody = document.getElementById('cart-list');
+        if (this.cart.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">Carrinho vazio</td></tr>`;
+        } else {
+            tbody.innerHTML = '';
+            let appString = [];
+            this.cart.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="text-align: center;"><b>${item.qtd}</b></td>
+                    <td>${item.desc}</td>
+                    <td>${item.cod}</td>
+                    <td style="text-align: center;"><button class="cart-item-remove" onclick="editor.removeMaterial(${index})">X</button></td>
+                `;
+                tbody.appendChild(tr);
+                appString.push(`[${String(item.cod).startsWith('SERV') ? 'SERV' : 'MAT'}] ${item.qtd}x ${item.desc} (${item.cod})`);
+            });
+            document.getElementById('ed-aplicacao').value = appString.join(' | ');
+        }
     },
     
     parseAppString: function(str) {
-    if (!str || typeof str !== 'string') return;
-    
-    const parts = str.split(' | ');
-    this.cart = [];
-    
-    parts.forEach(part => {
-    const match = part.match(/\[(MAT|SERV)\] (\d+)x (.+) \((.+)\)/);
-    
-    if (match) {
-    const [, tipo, qtd, desc, cod] = match;
-    this.cart.push({
-    cod: cod,
-    desc: desc.trim(),
-    qtd: parseInt(qtd),
-    tipo: tipo
-    });
-    }
-    });
-    
-    this.renderCart();
+        if (!str || typeof str !== 'string') return;
+        const parts = str.split(' | ');
+        this.cart = [];
+        parts.forEach(part => {
+            const match = part.match(/\[(MAT|SERV)\] (\d+)x (.+) \((.+)\)/);
+            if (match) {
+                this.cart.push({ cod: match[4], desc: match[3].trim(), qtd: parseInt(match[2]), tipo: match[1] });
+            }
+        });
+        this.renderCart();
     },
     
-    uploadFiles: function() {
-      const fileInput = document.getElementById('file-input');
-      const files = fileInput.files;
-
-      if (files.length === 0) {
-        this.showUploadStatus('Selecione arquivos primeiro', 'error');
-        return;
-      }
-
-      if (!estado.usuario) {
-        this.showUploadStatus('Faça login para enviar fotos', 'error');
-        return;
-      }
-
-      this.showUploadStatus(`Processando imagem...`, 'info');
-
-      const file = files[0];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        const rawData = e.target.result;
-        const base64 = rawData.split(',')[1];
-        const mimeType = rawData.split(';')[0].split(':')[1];
-
-        const payload = {
-          codObra: editor.currentObra.COD_OBRA_NUM,
-          nomeArquivo: file.name,
-          base64: base64,
-          mimeType: mimeType,
-          usuario: estado.usuario
-        };
-
-        editor.showUploadStatus('Enviando para o Google Drive... 🚀', 'warning');
-
-        // URL correta já atualizada no CONFIG
-        fetch(GAS_URL + '?acao=upload_evidencias', {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.sucesso) {
-            editor.showUploadStatus('✅ Foto salva no Drive!', 'success');
-
-            const container = document.getElementById('existing-fotos');
-            container.innerHTML += `
-              <div style="position: relative; border: 2px solid green;">
-                <img src="${rawData}" style="width: 100%; height: 80px; object-fit: cover;">
-                <div style="position: absolute; bottom: 0; background: green; color: white; font-size: 9px; padding: 2px;">SALVO</div>
-              </div>`;
-            
-            const currentUrls = document.getElementById('uploaded-urls').value;
-            const novaUrl = data.fileUrl || '';
-            if (novaUrl) {
-                document.getElementById('uploaded-urls').value = currentUrls ? currentUrls + ' | ' + novaUrl : novaUrl;
+    // ==== NOVO: CARREGAR HISTÓRICO ====
+    loadLogs: function() {
+        const tbody = document.getElementById('historico-list');
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Carregando...</td></tr>';
+        
+        sys.fetchJSONP({ 
+            acao: 'listar_logs', 
+            codObra: this.currentObra.COD_OBRA_NUM 
+        }, (res) => {
+            if (res.sucesso && res.logs) {
+                tbody.innerHTML = '';
+                if (res.logs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Sem histórico.</td></tr>';
+                    return;
+                }
+                res.logs.forEach(log => {
+                    // Formata Data
+                    let dataFormatada = log.data;
+                    try { dataFormatada = new Date(log.data).toLocaleString(); } catch(e){}
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${dataFormatada}</td>
+                        <td>${log.usuario}</td>
+                        <td><b>${log.acao}</b></td>
+                        <td style="font-size:10px">${log.detalhes}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:red">Erro ao carregar logs.</td></tr>';
             }
-            
-          } else {
-            editor.showUploadStatus('Erro no Drive: ' + data.mensagem, 'error');
-          }
-        })
-        .catch(erro => {
-          console.error(erro);
-          editor.showUploadStatus('Verifique a pasta do Drive (Possível sucesso)', 'warning');
         });
-      };
+    },
+    // ==================================
 
-      reader.readAsDataURL(file);
+    uploadFiles: function() {
+        const fileInput = document.getElementById('file-input');
+        if (fileInput.files.length === 0) { this.showUploadStatus('Selecione arquivos', 'error'); return; }
+        if (!estado.usuario) { this.showUploadStatus('Faça login', 'error'); return; }
+
+        this.showUploadStatus(`Processando...`, 'info');
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const rawData = e.target.result;
+            const base64 = rawData.split(',')[1];
+            const mimeType = rawData.split(';')[0].split(':')[1];
+
+            const payload = {
+                codObra: editor.currentObra.COD_OBRA_NUM,
+                nomeArquivo: file.name,
+                base64: base64,
+                mimeType: mimeType,
+                usuario: estado.usuario
+            };
+
+            editor.showUploadStatus('Enviando...', 'warning');
+            fetch(GAS_URL + '?acao=upload_evidencias', { method: 'POST', body: JSON.stringify(payload) })
+            .then(r => r.json())
+            .then(data => {
+                if (data.sucesso) {
+                    editor.showUploadStatus('✅ Salvo!', 'success');
+                    const container = document.getElementById('existing-fotos');
+                    container.innerHTML += `<div style="border: 2px solid green;"><img src="${rawData}" style="width: 100%; height: 80px; object-fit: cover;"></div>`;
+                    
+                    const curr = document.getElementById('uploaded-urls').value;
+                    document.getElementById('uploaded-urls').value = curr ? curr + ' | ' + data.fileUrl : data.fileUrl;
+                } else { editor.showUploadStatus('Erro: ' + data.mensagem, 'error'); }
+            })
+            .catch(e => editor.showUploadStatus('Erro conexão', 'error'));
+        };
+        reader.readAsDataURL(file);
     },
     
     clearFiles: function() {
-    document.getElementById('file-input').value = '';
-    document.getElementById('file-list').innerHTML = '';
-    document.getElementById('uploaded-urls').value = '';
-    document.getElementById('upload-status').style.display = 'none';
-    document.getElementById('existing-fotos').innerHTML = '';
+        document.getElementById('file-input').value = '';
+        document.getElementById('file-list').innerHTML = '';
+        document.getElementById('uploaded-urls').value = '';
+        document.getElementById('existing-fotos').innerHTML = '';
+        document.getElementById('upload-status').style.display = 'none';
     },
-    
-    showUploadStatus: function(msg, type) {
-    const statusEl = document.getElementById('upload-status');
-    statusEl.textContent = msg;
-    statusEl.className = `alert alert-${type}`;
-    statusEl.style.display = 'block';
-    },
-    
-    showExistingFotos: function(urls) {
-    const container = document.getElementById('existing-fotos');
-    container.innerHTML = '';
-    
-    urls.forEach((url, index) => {
-    container.innerHTML += `
-    <div style="position: relative;">
-    <img src="${url}" style="width: 100%; height: 80px; object-fit: cover; border: 1px solid var(--win-dark);">
-    <div style="position: absolute; bottom: 0; right: 0; background: rgba(0,0,0,0.7); color: white; font-size: 10px; padding: 1px 3px;">
-    Foto ${index+1}
-    </div>
-    </div>
-    `;
-    });
-    },
-    
-    testRDO: function() {
-    this.showSaveStatus('Testando geração de RDO...', 'info');
-    
-    setTimeout(() => {
-    const missingFields = [];
-    
-    if (!document.getElementById('ed-mascara').value) {
-    missingFields.push('Máscara BA');
-    }
-    
-    if (this.cart.length === 0) {
-    missingFields.push('Materiais aplicados');
-    }
-    
-    if (missingFields.length > 0) {
-    this.showSaveStatus(`Atenção: Faltam ${missingFields.join(', ')}`, 'warning');
-    alert(`Para gerar o RDO completo, preencha:\n\n• ${missingFields.join('\n• ')}`);
-    } else {
-    this.showSaveStatus('✅ Teste concluído: RDO pode ser gerado', 'success');
-    }
-    }, 1000);
-    },
-    
-    save: function(gerarRDO = false) {
-    if (!this.currentObra) return;
-    
-    const params = {
-    acao: gerarRDO ? 'gerar_rdo_e_enviar' : 'atualizar_anotacoes_obra',
-    codObra: document.getElementById('ed-id').value,
-    mascaraBa: document.getElementById('ed-mascara').value,
-    aplicacaoFeita: document.getElementById('ed-aplicacao').value,
-    pendencia: document.getElementById('ed-pendencia').value,
-    fileUrls: document.getElementById('uploaded-urls').value,
-    usuario: estado.usuario
-    };
 
-    const statusEl = document.getElementById('save-status');
-    
-    if (gerarRDO) {
-    statusEl.textContent = '🚀 Gerando RDO...';
-    } else {
-    statusEl.textContent = '💾 Salvando...';
-    }
-    
-    statusEl.style.color = 'blue';
-    
-    sys.fetchJSONP(params, (res) => {
-    if (res.sucesso) {
-    statusEl.textContent = '✅ Sucesso!';
-    statusEl.style.color = 'green';
-    
-    if (gerarRDO) {
-    if (res.auditoria) {
-    alert(`RDO Gerado!\n\nAuditoria:\n${res.auditoria}\n\nURL: ${res.fileUrl}`);
-    } else {
-    alert(`RDO Gerado com sucesso!\n\nURL: ${res.fileUrl}`);
-    }
-    
-    if (res.fileUrl) {
-    window.open(res.fileUrl, '_blank');
-    }
-    } else {
-    setTimeout(() => this.close(), 500);
-    }
-    
-    sys.showStatus(`Obra ${params.codObra} salva com sucesso!`, 'success');
-    sys.search();
-    
-    } else {
-    statusEl.textContent = '❌ Erro: ' + res.mensagem;
-    statusEl.style.color = 'red';
-    alert("Erro: " + res.mensagem);
-    }
-    });
+    showUploadStatus: function(msg, type) {
+        const el = document.getElementById('upload-status');
+        el.textContent = msg;
+        el.className = `alert alert-${type}`;
+        el.style.display = 'block';
     },
-    
-    showSaveStatus: function(msg, type) {
-    const statusEl = document.getElementById('save-status');
-    statusEl.textContent = msg;
-    
-    switch(type) {
-    case 'success':
-    statusEl.style.color = 'green';
-    break;
-    case 'error':
-    statusEl.style.color = 'red';
-    break;
-    case 'warning':
-    statusEl.style.color = 'orange';
-    break;
-    default:
-    statusEl.style.color = 'blue';
-    }
+
+    testRDO: function() {
+        if (!document.getElementById('ed-mascara').value) alert('Falta Máscara BA');
+        else if (this.cart.length === 0) alert('Faltam Materiais');
+        else alert('✅ RDO pronto para gerar.');
+    },
+
+    save: function(gerarRDO = false) {
+        if (!this.currentObra) return;
+        const params = {
+            acao: gerarRDO ? 'gerar_rdo_e_enviar' : 'atualizar_anotacoes_obra',
+            codObra: document.getElementById('ed-id').value,
+            mascaraBa: document.getElementById('ed-mascara').value,
+            aplicacaoFeita: document.getElementById('ed-aplicacao').value,
+            pendencia: document.getElementById('ed-pendencia').value,
+            fileUrls: document.getElementById('uploaded-urls').value,
+            usuario: estado.usuario
+        };
+
+        const statusEl = document.getElementById('save-status');
+        statusEl.textContent = 'Salvando...';
+        statusEl.style.color = 'blue';
+
+        sys.fetchJSONP(params, (res) => {
+            if (res.sucesso) {
+                statusEl.textContent = '✅ Salvo!';
+                statusEl.style.color = 'green';
+                
+                // ATUALIZA A TELA (Histórico e Lista Principal)
+                editor.loadLogs();
+                sys.search(); 
+                
+                if (gerarRDO) {
+                    if(res.fileUrl) window.open(res.fileUrl, '_blank');
+                    alert(`RDO Gerado!\nURL: ${res.fileUrl}`);
+                }
+            } else {
+                statusEl.textContent = 'Erro';
+                statusEl.style.color = 'red';
+                alert('Erro: ' + res.mensagem);
+            }
+        });
     }
     };
 
