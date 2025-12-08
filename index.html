@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SID 98 Enterprise - TelTelecom v7.8.2</title>
+    <title>SID 98 Enterprise - TelTelecom v8.2</title>
     <style>
     :root {
     --bg-color: #008080;
@@ -436,7 +436,7 @@
     <div class="win98-inset" style="padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
     <div style="text-align: center; margin-bottom: 10px;">
     <div style="font-size: 24px; color: var(--win-blue-start);">SID 98</div>
-    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v7.8</div>
+    <div style="font-size: 11px; color: var(--win-dark);">Enterprise v8.2</div>
     </div>
     
     <div class="form-group">
@@ -462,7 +462,7 @@
     
     <div style="font-size: 10px; color: var(--win-dark); text-align: center;">
     Sistema Integrado de Dados 98 Enterprise<br>
-    © 2024 TelTelecom - v7.8
+    © 2024 TelTelecom - v8.2
     </div>
     </div>
     </div>
@@ -471,7 +471,7 @@
     <div class="title-bar">
     <span class="flex-row">
     <span style="margin-right: 5px;">🖥️</span>
-    SID 98 Enterprise v7.8 - TelTelecom
+    SID 98 Enterprise v8.2 - TelTelecom
     </span>
     <div class="flex-row">
     <button class="btn-98" style="padding: 0 4px; min-width: 20px;" title="Minimizar">_</button>
@@ -718,7 +718,7 @@
     <th width="120">Data/Hora</th>
     <th width="100">Usuário</th>
     <th>Ação</th>
-    <th width="100">Status</th>
+    <th width="90">Detalhes</th>
     </tr>
     </thead>
     <tbody id="historico-list">
@@ -747,6 +747,25 @@
     </div>
     </div>
 
+    <div id="modalDetalhes" class="modal-overlay" style="z-index: 2000;">
+        <div class="win98-box" style="width: 850px; max-width: 98%; height: 90vh; display: flex; flex-direction: column;">
+            <div class="title-bar" style="background: linear-gradient(90deg, #800000, #ff0000);"> 
+                <span>🕵️ AUDITORIA DE REGISTRO (SNAPSHOT)</span>
+                <button class="btn-98" style="padding:0 4px;" onclick="document.getElementById('modalDetalhes').style.display='none'">X</button>
+            </div>
+            
+            <div class="win98-inset" style="flex: 1; padding: 20px; overflow-y: auto; margin: 4px; background: #505050; display:flex; justify-content:center;">
+                <div id="folhaAuditoria" style="background: white; width: 100%; max-width: 750px; min-height: 100%; padding: 40px; box-shadow: 0 0 10px black; font-family: 'Times New Roman', serif; color: black;">
+                    </div>
+            </div>
+            
+            <div style="padding: 8px; text-align: right; background: var(--win-gray);">
+                <button class="btn-98" onclick="window.print()">🖨️ Imprimir Tela</button>
+                <button class="btn-98" onclick="document.getElementById('modalDetalhes').style.display='none'">Fechar Auditoria</button>
+            </div>
+        </div>
+    </div>
+
     <script>
     // ====
     // CONFIGURAÇÃO DO SISTEMA
@@ -756,7 +775,7 @@
     const CONFIG = {
     itemsPerPage: 20,
     empresa: 'TelTelecom',
-    versao: '7.8.2'
+    versao: '8.2'
     };
     
     const estado = {
@@ -800,7 +819,7 @@
     
     login: function() {
     const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value; // PEGA A SENHA
+    const password = document.getElementById('login-password').value; 
     
     if (!email || !password) {
     this.showLoginError('Informe email e senha');
@@ -810,7 +829,6 @@
     this.showLoading(true);
     this.showStatus('Validando credenciais...', 'info');
     
-    // ENVIA A SENHA NO PAYLOAD
     this.fetchJSONP({ acao: 'login', email: email, senha: password }, (res) => {
     this.showLoading(false);
     
@@ -989,7 +1007,6 @@
     this.showLoading(false);
     
     if (res.sucesso) {
-    // Backend agora devolve: mensagem, total, novas, atualizadas
     if (res.mensagem) {
     this.showStatus(res.mensagem, 'success');
     } else {
@@ -1089,7 +1106,6 @@
     };
     
     const query = new URLSearchParams(params).toString();
-    // Usa a URL configurada no topo do script
     script.src = `${GAS_URL}?${query}&callback=${callbackName}`;
     script.onerror = () => {
     this.showLoading(false);
@@ -1102,15 +1118,17 @@
     };
 
     // ====
-    // EDITOR DE OBRA (CORRIGIDO v7.8.2)
+    // EDITOR DE OBRA
     // ====
     const editor = {
     currentObra: null,
+    currentLogs: [], // Armazena logs para consulta
     cart: [],
     
     open: function(obra) {
         this.currentObra = obra;
         this.cart = [];
+        this.currentLogs = [];
         
         document.getElementById('ed-id').value = obra.COD_OBRA_NUM;
         
@@ -1133,7 +1151,6 @@
         this.popularSelectMateriais();
         this.parseAppString(obra.APLICACAO_FEITA);
         
-        // Carrega o histórico da obra
         this.loadLogs(); 
         
         document.getElementById('editor-modal').style.display = 'flex';
@@ -1152,7 +1169,6 @@
     },
     
     hasUnsavedChanges: function() {
-        // Lógica simplificada para não travar o fluxo
         return false; 
     },
     
@@ -1170,7 +1186,6 @@
         }
     },
     
-    // ==== CORREÇÃO DO FILTRO DE MATERIAIS ====
     popularSelectMateriais: function() {
         const select = document.getElementById('mat-select');
         select.innerHTML = '<option value="">Selecione um material...</option>';
@@ -1188,7 +1203,6 @@
         const select = document.getElementById('mat-select');
         select.innerHTML = '<option value="">Selecione um material...</option>';
         
-        // AQUI ESTAVA O ERRO: Convertemos tudo para String antes de comparar
         const filtered = estado.catalogo.filter(item => 
             String(item.cod).toLowerCase().includes(term) || 
             String(item.desc || '').toLowerCase().includes(term)
@@ -1208,7 +1222,6 @@
             select.appendChild(option);
         }
     },
-    // ==========================================
     
     addMaterial: function() {
         const select = document.getElementById('mat-select');
@@ -1276,7 +1289,7 @@
         this.renderCart();
     },
     
-    // ==== NOVO: CARREGAR HISTÓRICO ====
+    // ==== LISTA DE LOGS COM BOTÃO DE DETALHES ====
     loadLogs: function() {
         const tbody = document.getElementById('historico-list');
         tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Carregando...</td></tr>';
@@ -1286,22 +1299,30 @@
             codObra: this.currentObra.COD_OBRA_NUM 
         }, (res) => {
             if (res.sucesso && res.logs) {
+                this.currentLogs = res.logs; // Guarda na memória
                 tbody.innerHTML = '';
                 if (res.logs.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Sem histórico.</td></tr>';
                     return;
                 }
-                res.logs.forEach(log => {
-                    // Formata Data
+                res.logs.forEach((log, index) => {
                     let dataFormatada = log.data;
                     try { dataFormatada = new Date(log.data).toLocaleString(); } catch(e){}
                     
+                    // Verifica se tem JSON válido
+                    let btnDetalhes = '';
+                    if (log.json && log.json.length > 5) {
+                        btnDetalhes = `<button class="btn-98" style="padding:1px 6px;" onclick="editor.showLogDetails(${index})">🔍 Ver Auditoria</button>`;
+                    } else {
+                        btnDetalhes = '<span style="color:#999">-</span>';
+                    }
+
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${dataFormatada}</td>
                         <td>${log.usuario}</td>
                         <td><b>${log.acao}</b></td>
-                        <td style="font-size:10px">${log.detalhes}</td>
+                        <td style="text-align:center;">${btnDetalhes}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -1310,7 +1331,116 @@
             }
         });
     },
-    // ==================================
+
+    // ==== EXIBIR MODAL DE AUDITORIA VISUAL ====
+    showLogDetails: function(index) {
+        const log = this.currentLogs[index];
+        if (!log || !log.json) return;
+
+        try {
+            const dados = JSON.parse(log.json);
+            
+            // Tenta formatar a data
+            let dataLog = log.data;
+            try { dataLog = new Date(log.data).toLocaleString(); } catch(e){}
+
+            // 1. CABEÇALHO DO DOCUMENTO
+            let html = `
+                <div style="border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 20px;">
+                    <h2 style="margin:0; text-transform:uppercase; color:#333;">Registro de Auditoria #${index + 1}</h2>
+                    <table style="width:100%; font-size:12px; margin-top:10px; border-collapse:collapse;">
+                        <tr><td><strong>Data do Registro:</strong> ${dataLog}</td><td><strong>ID Obra:</strong> ${editor.currentObra.COD_OBRA_NUM}</td></tr>
+                        <tr><td><strong>Usuário Responsável:</strong> ${log.usuario}</td><td><strong>Ação:</strong> ${log.acao}</td></tr>
+                        <tr><td colspan="2" style="padding-top:5px; border-top:1px solid #eee;"><strong>Descrição:</strong> ${editor.currentObra.DESCRICAO || ''}</td></tr>
+                    </table>
+                </div>
+            `;
+
+            // 2. MÁSCARA / RELATO
+            html += `<h3 style="border-bottom:1px solid #ccc; padding-bottom:5px;">1. Relato Técnico (Máscara)</h3>`;
+            if (dados.mascara) {
+                html += `<div style="white-space: pre-wrap; background:#f9f9f9; padding:10px; border:1px dotted #ccc; font-family: 'Courier New', monospace; font-size:11px;">${dados.mascara}</div>`;
+            } else {
+                html += `<p style="color:#999;"><i>Nenhum relato gravado neste registro.</i></p>`;
+            }
+
+            // 3. MATERIAIS (Transformar texto em Tabela Visual)
+            html += `<h3 style="border-bottom:1px solid #ccc; padding-bottom:5px; margin-top:20px;">2. Materiais Aplicados (Snapshot)</h3>`;
+            if (dados.materiais) {
+                let listaRaw = dados.materiais.split(' | ');
+                
+                html += `<table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid black;">
+                            <thead style="background:#eee;">
+                                <tr>
+                                    <th style="border:1px solid black; padding:4px;">Tipo</th>
+                                    <th style="border:1px solid black; padding:4px;">Descrição Completa</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                
+                listaRaw.forEach(item => {
+                    let tipo = item.includes('[SERV]') ? 'SERVIÇO' : 'MATERIAL';
+                    let cor = item.includes('[SERV]') ? 'blue' : 'black';
+                    html += `<tr>
+                                <td style="border:1px solid black; padding:4px; text-align:center; color:${cor}; font-weight:bold;">${tipo}</td>
+                                <td style="border:1px solid black; padding:4px;">${item.replace(/\[.*?\] /, '')}</td>
+                             </tr>`;
+                });
+                html += `</tbody></table>`;
+            } else {
+                html += `<p style="color:#999;"><i>Nenhum material gravado neste registro.</i></p>`;
+            }
+
+            // 4. FOTOS (Renderizar as Imagens com FIX THUMBNAIL)
+            html += `<h3 style="border-bottom:1px solid #ccc; padding-bottom:5px; margin-top:20px;">3. Evidências Fotográficas</h3>`;
+            if (dados.fotos && dados.fotos.trim() !== "") {
+                let urls = dados.fotos.split(' | ');
+                html += `<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:10px;">`;
+                
+                urls.forEach(url => {
+                    let cleanUrl = url.trim();
+                    
+                    // === O PULO DO GATO PARA CORRIGIR A FOTO ===
+                    // Se o link for do tipo 'id=', extraímos o ID e montamos o link Thumbnail na força bruta.
+                    let idMatch = cleanUrl.match(/id=([^&]+)/);
+                    let srcUrl = cleanUrl;
+                    
+                    if (idMatch) {
+                        // FORÇA O MODO THUMBNAIL (Mais robusto que export=view)
+                        srcUrl = `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
+                    }
+                    
+                    if(cleanUrl) {
+                        html += `
+                        <div style="border:1px solid #ddd; padding:4px; text-align:center;">
+                            <img src="${srcUrl}" style="width:100%; height:200px; object-fit:cover; border:1px solid #000;" onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=Erro+Foto';">
+                            <div style="font-size:10px; margin-top:4px; color:blue; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
+                                <a href="${cleanUrl}" target="_blank">Abrir Original</a>
+                            </div>
+                        </div>`;
+                    }
+                });
+                html += `</div>`;
+            } else {
+                html += `<p style="color:#999;"><i>Nenhuma foto gravada neste registro.</i></p>`;
+            }
+            
+            // 5. PENDÊNCIAS
+             if (dados.pendencia) {
+                html += `<h3 style="border-bottom:1px solid #ccc; padding-bottom:5px; margin-top:20px; color:red;">4. Pendências / Devolução</h3>`;
+                html += `<p style="color:red; font-weight:bold;">${dados.pendencia}</p>`;
+            }
+
+            // Injeta no papel
+            document.getElementById('folhaAuditoria').innerHTML = html;
+            
+            // Abre o Modal
+            document.getElementById('modalDetalhes').style.display = 'flex';
+
+        } catch(e) {
+            alert('Erro ao gerar auditoria visual: ' + e.message);
+        }
+    },
 
     uploadFiles: function() {
         const fileInput = document.getElementById('file-input');
@@ -1394,7 +1524,7 @@
                 statusEl.textContent = '✅ Salvo!';
                 statusEl.style.color = 'green';
                 
-                // ATUALIZA A TELA (Histórico e Lista Principal)
+                // Atualiza logs para mostrar o novo snapshot imediatamente
                 editor.loadLogs();
                 sys.search(); 
                 
